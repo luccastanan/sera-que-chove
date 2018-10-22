@@ -1,2 +1,2 @@
-# sera-que-chove
+# Será que Chove?
 Estágio da faculdade de Ciência da Computação
