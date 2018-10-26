@@ -38,16 +38,20 @@
             <View style={styles.panel}>
                 <View style={styles.panelContent}>
                     <Text>Londrina</Text>
-                    <Text>* 24</Text>
-                    <Text>▲ 28º</Text>
-                    <Text>▼ 22º</Text>
+                    <View style={styles.panelWeather}>
+                        <Text style={styles.panelCurrent}>* 24</Text>
+                        <View style={styles.panelMM}>
+                            <Text>▲ 28º</Text>
+                            <Text>▼ 22º</Text>
+                        </View>
+                    </View>
                 </View>
                 <View style={styles.panelBottom}>
                         <View style={styles.panelBottomDesc}>
                             <Text>Amanhã</Text>
                         </View> 
                     <View style={styles.panelBottomWeather}>
-                        <Text>* 16</Text>
+                        <Text style={styles.panelBottomCurrent}>* 16</Text>
                         <View style={styles.panelBottomMM}>
                             <Text>▲ 28º</Text>
                             <Text>▼ 22º</Text>
@@ -88,6 +92,20 @@
     },
     panelContent:{
         flex:1
+    },
+    panelWeather:{
+        flex:1,
+        alignSelf:'center',
+        alignContent:'center',
+        justifyContent:'center'
+    }, 
+    panelCurrent:{
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize:32
+    },
+    panelMM:{
+        flexDirection:'row'
     },
     panelBottom: {
         height:40,

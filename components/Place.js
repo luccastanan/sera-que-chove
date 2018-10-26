@@ -4,11 +4,6 @@ import {View, Text, StyleSheet} from 'react-native'
 type Props = {}
 export default class Place extends Component<Props>{
 
-    constructor(props){
-        super(props)
-        console.log('coxinha', props)
-    }
-
     render(){
         return <View style={styles.container}>
                 <View style={styles.infoPanel}>
