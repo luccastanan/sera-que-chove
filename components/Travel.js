@@ -40,6 +40,7 @@ export default class Travel extends Component<Props> {
 			<FlatList 
 				data={this.state.places}
 				renderItem={ place => <Place {...place} />}
+				keyExtractor={(item, index) => index.toString()}
 				style={{ flex: 1 }}
 			/>
 		</View>

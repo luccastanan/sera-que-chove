@@ -12,7 +12,7 @@
     import Orientation from 'react-native-orientation'
     import { red } from 'ansi-colors';
 
-    import Travel from './components/Travel'
+    import Travel from '../components/Travel'
 
     type Props = {};
     export default class Home extends Component<Props> {
