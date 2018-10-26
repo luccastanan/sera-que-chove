@@ -9,6 +9,7 @@
 import Home from './interfaces/HomeScreen'
 import Login from './interfaces/LoginScreen'
 import Register from './interfaces/RegisterScreen'
+import Forgot from './interfaces/ForgotScreen'
 import {createStackNavigator} from 'react-navigation'
 
 export default createStackNavigator(
@@ -25,6 +26,12 @@ export default createStackNavigator(
 			screen: Register,
 			navigationOptions: { 
 				title:'Cadastro'
+			}
+		},
+		Forgot: {
+			screen: Forgot,
+			navigationOptions: {
+				title: 'Esqueci minha senha'
 			}
 		}
 	}, {

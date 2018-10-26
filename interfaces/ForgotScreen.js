@@ -15,13 +15,12 @@ import Orientation from 'react-native-orientation'
 import { red } from 'ansi-colors';
 
 type Props = {};
-export default class Login extends Component<Props> {
+export default class Forgot extends Component<Props> {
 
     constructor(props){
         super(props)
         this.state={
-            email:'',
-            pass:''
+            email:''
         }
     }
 
@@ -32,35 +31,16 @@ export default class Login extends Component<Props> {
                     placeholder='E-mail'
                     onChangeText={(text) => {this.setState({email:text})}}
                 />
-                <TextInput
-                    secureTextEntry
-                    placeholder='Senha'
-                    onChangeText={(text) => { this.setState({ pass: text }) }}
-                />
                 <Button
-                    title='Entrar'
+                    title='Enviar'
                     backgroundColor='#3498DB'
-                    onPress={() => this._touchLogin()} />
-                <Button
-                    title='Cadastrar-se'
-                    onPress={() => this._touchRegister()} />
-                <Button
-                    title='Esqueci minha senha'
-                    onPress={() => this._touchForgot()} />
+                    onPress={() => this._touchSend()} />
             </View>
         </View>
     }
 
-    _touchLogin = () => {
-        this.props.navigation.navigate('Home')
-    }
-
-    _touchRegister = () => {
-        this.props.navigation.navigate('Register')
-    }
-
-    _touchForgot = () => {
-        this.props.navigation.navigate('Forgot')
+    _touchSend = () => {
+        
     }
 
     componentDidMount() {
