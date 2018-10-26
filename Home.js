@@ -1,49 +1,106 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+    /**
+     * Sample React Native App
+     * https://github.com/facebook/react-native
+     *
+     * @format
+     * @flow
+     */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+    import React, {Component} from 'react';
+    import {Platform, StyleSheet, Text, View, FlatList, Button, TouchableOpacity} from 'react-native';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+    import Orientation from 'react-native-orientation'
+    import { red } from 'ansi-colors';
 
-type Props = {};
-export default class Home extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
-  }
-}
+    import Travel from './components/Travel'
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+    type Props = {};
+    export default class Home extends Component<Props> {
+
+    constructor() {
+        super();
+        this.state = {
+        dataSource: [{ title: 'Title Text', key: 'item1' }, 
+        { title: 'Title Text2', key: 'item2' }, 
+            { title: 'Title Text3', key: 'item3' },
+            { title: 'Title Text4', key: 'item4' },
+            { title: 'Title Text5', key: 'item5' },
+            { title: 'Title Text6', key: 'item6' },
+            { title: 'Title Text7', key: 'item7' },
+            { title: 'Title Text8', key: 'item8' },
+            { title: 'Title Text9', key: 'item9' }]
+        };
+    }
+
+    render() {
+        return (
+        <View style={styles.container}>
+            <View style={styles.panel}>
+                <View style={styles.panelContent}>
+                    <Text>Londrina</Text>
+                    <Text>* 24</Text>
+                    <Text>▲ 28º</Text>
+                    <Text>▼ 22º</Text>
+                </View>
+                <View style={styles.panelBottom}>
+                        <View style={styles.panelBottomDesc}>
+                            <Text>Amanhã</Text>
+                        </View> 
+                    <View style={styles.panelBottomWeather}>
+                        <Text>* 16</Text>
+                        <View style={styles.panelBottomMM}>
+                            <Text>▲ 28º</Text>
+                            <Text>▼ 22º</Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
+            <FlatList horizontal
+                data={this.state.dataSource}
+                renderItem={({ item }) => <Travel text={item.title}/>}
+                keyExtractor={(item,index) => index.toString()}
+                style={{flex:1}}
+                />
+            <TouchableOpacity>
+                <Text>Ver todas</Text>
+            </TouchableOpacity>
+        </View>
+        );
+    }
+
+    _handleSeeMore = () => {
+
+    }
+
+    componentDidMount() {
+        Orientation.lockToPortrait();
+    }
+    }
+
+    const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#F5FCFF',
+    },
+    panel: {
+        height:200,
+        backgroundColor:'gray'
+    },
+    panelContent:{
+        flex:1
+    },
+    panelBottom: {
+        height:40,
+        backgroundColor:'#3498DB',
+        flexDirection: 'row'
+    },
+    panelBottomDesc:{
+        flex:1
+    },
+    panelBottomWeather: { 
+        flexDirection: 'row' 
+    }, 
+    panelBottomMM:{
+        flexDirection:'column'
+    }
+    });
