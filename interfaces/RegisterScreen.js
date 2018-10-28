@@ -15,7 +15,7 @@ import Orientation from 'react-native-orientation'
 import { red } from 'ansi-colors';
 
 type Props = {};
-export default class Register extends Component<Props> {
+export default class RegisterScreen extends Component<Props> {
 
     constructor(props){
         super(props)

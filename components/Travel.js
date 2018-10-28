@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, FlatList, Button, TouchableOpacity } from 'react-native';
 
-import Place from './Place'
+import FullPlace from './FullPlace'
 
 type Props = {};
 export default class Travel extends Component<Props> {
@@ -39,7 +39,7 @@ export default class Travel extends Component<Props> {
 		return <View style={styles.container}>
 			<FlatList 
 				data={this.state.places}
-				renderItem={ place => <Place {...place} />}
+				renderItem={ place => <FullPlace {...place} />}
 				keyExtractor={(item, index) => index.toString()}
 				style={{ flex: 1 }}
 			/>

@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {View, Text, StyleSheet} from 'react-native'
 
 type Props = {}
-export default class Place extends Component<Props>{
+export default class FullPlace extends Component<Props>{
 
     render(){
         return <View style={styles.container}>

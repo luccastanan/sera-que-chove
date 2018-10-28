@@ -10,13 +10,18 @@ import Home from './interfaces/HomeScreen'
 import Login from './interfaces/LoginScreen'
 import Register from './interfaces/RegisterScreen'
 import Forgot from './interfaces/ForgotScreen'
+import Travel from './interfaces/TravelScreen'
 import {createStackNavigator} from 'react-navigation'
+
+import { Icon } from 'react-native-elements'
 
 export default createStackNavigator(
 	{
 		Home : {
 			screen: Home,
-			navigationOptions:{header: null}
+			navigationOptions:{
+				title:'Home'
+			}
 		},
 		Login:{
             screen: Login,
@@ -33,9 +38,15 @@ export default createStackNavigator(
 			navigationOptions: {
 				title: 'Esqueci minha senha'
 			}
+		},
+		Travel: {
+			screen: Travel,
+			navigationOptions: {
+				title: 'Viagem'
+			}
 		}
 	}, {
-		initialRouteName: ('Login'),
+		initialRouteName: ('Travel'),
 		modal: 'modal'
 	}
 )

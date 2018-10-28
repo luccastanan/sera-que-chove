@@ -6,16 +6,42 @@
      * @flow
      */
 
-    import React, {Component} from 'react';
-    import {Platform, StyleSheet, Text, View, FlatList, Button, TouchableOpacity} from 'react-native';
+import React, {Component} from 'react';
+import {Platform, StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native';
 
-    import Orientation from 'react-native-orientation'
-    import { red } from 'ansi-colors';
+import Orientation from 'react-native-orientation'
+import { red } from 'ansi-colors';
+import {Button} from 'react-native-elements'
+import Travel from '../components/Travel'
 
-    import Travel from '../components/Travel'
+import RNPopover from 'react-native-popover-menu';
+import Icon from 'react-native-vector-icons'
 
-    type Props = {};
-    export default class Home extends Component<Props> {
+type Props = {};
+
+let menus = [
+    {
+        label: "Editing",
+        menus: [
+            {
+                label: "Copy"
+            },
+            {
+                label: "Paste"
+            }
+        ]
+    },
+    {
+        label: "Other",
+        menus: [
+            {
+                label: "Share"
+            }
+        ]
+    }
+]
+
+export default class HomeScreen extends Component<Props> {
 
     constructor() {
         super();
@@ -28,7 +54,8 @@
             { title: 'Title Text6', key: 'item6' },
             { title: 'Title Text7', key: 'item7' },
             { title: 'Title Text8', key: 'item8' },
-            { title: 'Title Text9', key: 'item9' }]
+            { title: 'Title Text9', key: 'item9' }],
+        openedMenu:false
         };
     }
 
@@ -37,7 +64,23 @@
         <View style={styles.container}>
             <View style={styles.panel}>
                 <View style={styles.panelContent}>
-                    <Text>Londrina</Text>
+                    <View style={styles.panelHeader}>
+                        <Text>Londrina</Text>
+                        <Button 
+                            title='MENU'
+                            onPress={() => this.setState({openedMenu:true})}/>
+                            {/*<RNPopover visible={true} reference={this.ref} onDone={(mainMenuSelection, subMenuSelection) => {
+                                console.log("selection: " + mainMenuSelection + ", " + subMenuSelection);
+                            }}>
+                                <RNPopover.Menu label={"Editing"}>
+                                    <RNPopover.Menu label={"Copy"}  />
+                                    <RNPopover.Menu label={"Paste"}  />
+                                </RNPopover.Menu>
+                                <RNPopover.Menu>
+                                    <RNPopover.Menu label={"Share"}  />
+                                </RNPopover.Menu>
+                        </RNPopover>*/}
+                    </View>
                     <View style={styles.panelWeather}>
                         <Text style={styles.panelCurrent}>* 24</Text>
                         <View style={styles.panelMM}>
@@ -72,16 +115,16 @@
         );
     }
 
-    _handleSeeMore = () => {
-
+    _touchMenu = () => {
+        this.setState({openedMenu:true})
     }
 
     componentDidMount() {
         Orientation.lockToPortrait();
     }
-    }
+}
 
-    const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5FCFF',
@@ -92,6 +135,10 @@
     },
     panelContent:{
         flex:1
+    },
+    panelHeader:{
+        flexDirection:'row',
+        justifyContent:'space-between'
     },
     panelWeather:{
         flex:1,
@@ -121,4 +168,4 @@
     panelBottomMM:{
         flexDirection:'column'
     }
-    });
+});
