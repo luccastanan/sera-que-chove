@@ -1,4 +1,6 @@
 rootProject.name = 'SeraQueChove'
+include ':realm'
+project(':realm').projectDir = new File(rootProject.projectDir, '../node_modules/realm/android')
 include ':react-native-popover-menu'
 project(':react-native-popover-menu').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-popover-menu/android')
 include ':react-native-vector-icons'

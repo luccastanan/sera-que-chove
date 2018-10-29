@@ -7,12 +7,14 @@
      */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput} from 'react-native';
+import {StyleSheet, View, TextInput, Alert} from 'react-native';
 
 import { Button } from 'react-native-elements'
 
 import Orientation from 'react-native-orientation'
 import { red } from 'ansi-colors';
+
+import UserServices from '../database/UserServices'
 
 type Props = {};
 export default class RegisterScreen extends Component<Props> {
@@ -20,10 +22,11 @@ export default class RegisterScreen extends Component<Props> {
     constructor(props){
         super(props)
         this.state={
+            name: '',
             email:'',
             pass:'',
             dateBirth:'',
-            cellphone:'',
+            phone:'',
         }
     }
 
@@ -31,32 +34,46 @@ export default class RegisterScreen extends Component<Props> {
         return <View style={styles.container}>
             <View style={styles.panelForm}>
                 <TextInput
-                    placeholder='E-mail'
-                    onChangeText={(text) => {this.setState({email:text})}}
+                    value={this.state.name}
+                    placeholder='Nome'
+                    onChangeText={(name) => {this.setState({name})}}
                 />
                 <TextInput
+                    value={this.state.email}
+                    placeholder='E-mail'
+                    onChangeText={(email) => { this.setState({ email }) }}
+                />
+                <TextInput
+                    value={this.state.pass}
                     secureTextEntry
                     placeholder='Senha'
-                    onChangeText={(text) => { this.setState({ pass: text }) }}
+                    onChangeText={(pass) => { this.setState({ pass }) }}
                 />
                 <TextInput
+                    value={this.state.dateBirth}
                     placeholder='Data de nascimento'
-                    onChangeText={(text) => { this.setState({ dateBirth: text }) }}
+                    onChangeText={(dateBirth) => { this.setState({ dateBirth }) }}
                 />
                 <TextInput
+                    value={this.state.phone}
                     placeholder='Celular'
-                    onChangeText={(text) => { this.setState({ cellphone: text }) }}
+                    onChangeText={(phone) => { this.setState({ phone }) }}
                 />
                 <Button
                     title='Cadastrar'
                     backgroundColor='#3498DB'
-                    onPress={this._touchRegister()} />
+                    onPress={() => this._touchRegister()} />
             </View>
         </View>
     }
 
     _touchRegister = () => {
-
+        if (this.state.name === '' || this.state.email === '' || this.state.pass === '' || this.state.dateBirth === '' || this.state.phone === ''){
+            Alert.alert('Atenção','Todos os campos são obrigatórios')
+        }else{
+            UserServices.insert(this.state)
+            this.props.navigation.goBack()
+        }
     }
 
     componentDidMount() {

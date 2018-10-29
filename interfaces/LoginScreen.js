@@ -7,12 +7,14 @@
      */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput} from 'react-native';
+import {Platform, StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, Alert} from 'react-native';
 
 import { Button } from 'react-native-elements'
 
 import Orientation from 'react-native-orientation'
 import { red } from 'ansi-colors';
+
+import UserServices from '../database/UserServices'
 
 type Props = {};
 export default class LoginScreen extends Component<Props> {
@@ -20,8 +22,8 @@ export default class LoginScreen extends Component<Props> {
     constructor(props){
         super(props)
         this.state={
-            email:'',
-            pass:''
+            email:'l@g.com',
+            pass:'123'
         }
     }
 
@@ -29,10 +31,12 @@ export default class LoginScreen extends Component<Props> {
         return <View style={styles.container}>
             <View style={styles.panelForm}>
                 <TextInput
+                    value={this.state.email}
                     placeholder='E-mail'
                     onChangeText={(text) => {this.setState({email:text})}}
                 />
                 <TextInput
+                    value={this.state.pass}
                     secureTextEntry
                     placeholder='Senha'
                     onChangeText={(text) => { this.setState({ pass: text }) }}
@@ -52,7 +56,11 @@ export default class LoginScreen extends Component<Props> {
     }
 
     _touchLogin = () => {
-        this.props.navigation.navigate('Home')
+        let user = UserServices.auth(this.state.email, this.state.pass)
+        if (user) 
+            this.props.navigation.navigate('Home', {user})
+        else 
+            Alert.alert('Atenção', 'Dados inválidos')
     }
 
     _touchRegister = () => {

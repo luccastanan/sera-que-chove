@@ -12,51 +12,33 @@ import {Platform, StyleSheet, Text, View, FlatList, TouchableOpacity} from 'reac
 import Orientation from 'react-native-orientation'
 import { red } from 'ansi-colors';
 import {Button} from 'react-native-elements'
-import Travel from '../components/Travel'
 
-import RNPopover from 'react-native-popover-menu';
-import Icon from 'react-native-vector-icons'
+import Icon from 'react-native-vector-icons/SimpleLineIcons'
+
+import Travel from '../components/Travel'
+import TravelListScreen from './TravelListScreen'
+
+import { DrawerNavigator } from 'react-navigation'
 
 type Props = {};
+class HomeScreen extends Component<Props> {
 
-let menus = [
-    {
-        label: "Editing",
-        menus: [
-            {
-                label: "Copy"
-            },
-            {
-                label: "Paste"
-            }
-        ]
-    },
-    {
-        label: "Other",
-        menus: [
-            {
-                label: "Share"
-            }
-        ]
-    }
-]
-
-export default class HomeScreen extends Component<Props> {
-
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-        dataSource: [{ title: 'Title Text', key: 'item1' }, 
-        { title: 'Title Text2', key: 'item2' }, 
-            { title: 'Title Text3', key: 'item3' },
-            { title: 'Title Text4', key: 'item4' },
-            { title: 'Title Text5', key: 'item5' },
-            { title: 'Title Text6', key: 'item6' },
-            { title: 'Title Text7', key: 'item7' },
-            { title: 'Title Text8', key: 'item8' },
-            { title: 'Title Text9', key: 'item9' }],
-        openedMenu:false
+            dataSource: [{ title: 'Title Text', key: 'item1' }, 
+            { title: 'Title Text2', key: 'item2' }, 
+                { title: 'Title Text3', key: 'item3' },
+                { title: 'Title Text4', key: 'item4' },
+                { title: 'Title Text5', key: 'item5' },
+                { title: 'Title Text6', key: 'item6' },
+                { title: 'Title Text7', key: 'item7' },
+                { title: 'Title Text8', key: 'item8' },
+                { title: 'Title Text9', key: 'item9' }],
+            openedMenu:false
         };
+
+        console.log(props.navigation.state.params.user)
     }
 
     render() {
@@ -65,21 +47,8 @@ export default class HomeScreen extends Component<Props> {
             <View style={styles.panel}>
                 <View style={styles.panelContent}>
                     <View style={styles.panelHeader}>
+                        <Icon.Button name="menu" size={22} backgroundColor='transparent' onPress={() => this.props.navigation.openDrawer()}  />
                         <Text>Londrina</Text>
-                        <Button 
-                            title='MENU'
-                            onPress={() => this.setState({openedMenu:true})}/>
-                            {/*<RNPopover visible={true} reference={this.ref} onDone={(mainMenuSelection, subMenuSelection) => {
-                                console.log("selection: " + mainMenuSelection + ", " + subMenuSelection);
-                            }}>
-                                <RNPopover.Menu label={"Editing"}>
-                                    <RNPopover.Menu label={"Copy"}  />
-                                    <RNPopover.Menu label={"Paste"}  />
-                                </RNPopover.Menu>
-                                <RNPopover.Menu>
-                                    <RNPopover.Menu label={"Share"}  />
-                                </RNPopover.Menu>
-                        </RNPopover>*/}
                     </View>
                     <View style={styles.panelWeather}>
                         <Text style={styles.panelCurrent}>* 24</Text>
@@ -108,21 +77,29 @@ export default class HomeScreen extends Component<Props> {
                 keyExtractor={(item,index) => index.toString()}
                 style={{flex:1}}
                 />
-            <TouchableOpacity>
-                <Text>Ver todas</Text>
-            </TouchableOpacity>
         </View>
         );
-    }
-
-    _touchMenu = () => {
-        this.setState({openedMenu:true})
     }
 
     componentDidMount() {
         Orientation.lockToPortrait();
     }
 }
+
+export default DrawerNavigator({
+    Home: {
+        screen: HomeScreen,
+        navigationOptions: {
+            title: 'Início'
+        }
+    },
+    TravelList: {
+        screen: TravelListScreen,
+        navigationOptions: {
+            title: 'Viagens'
+        }
+    }
+})
 
 const styles = StyleSheet.create({
     container: {

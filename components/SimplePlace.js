@@ -7,7 +7,6 @@ export default class SimplePlace extends Component<Props>{
 
     constructor(props){
         super(props)
-        console.log('SimplePlace', props)
     }
 
     render(){

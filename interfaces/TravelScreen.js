@@ -57,6 +57,7 @@ export default class TravelScreen extends Component<Props> {
     _createModal = () => {
         return <View style={styles.modal}>
             <View style={styles.modalContainer}>
+                <Text>Local</Text>
                 <FormInput
                     placeholder='Endereço'
                     onChangeText={text => this.setState({address: text})} />
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         width: 300,
-        height: 150,
+        height: 170,
         backgroundColor: 'white',
         borderRadius: 2
     },

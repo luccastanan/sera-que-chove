@@ -46,7 +46,7 @@ export default createStackNavigator(
 			}
 		}
 	}, {
-		initialRouteName: ('Travel'),
+		initialRouteName: ('Login'),
 		modal: 'modal'
 	}
 )
