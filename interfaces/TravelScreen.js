@@ -6,7 +6,11 @@ import {Button, FormInput} from 'react-native-elements'
 
 import SimplePlace from '../components/SimplePlace'
 
-//import Modal from 'react-native-modal'
+import TravelServices from '../database/TravelServices'
+
+import PlaceServices from '../database/PlaceServices'
+import UserServices from '../database/UserServices'
+
 
 type Props = {}
 export default class TravelScreen extends Component<Props> {
@@ -17,20 +21,7 @@ export default class TravelScreen extends Component<Props> {
             visibleModal: false,
             address: '',
             date: '',
-            places:[
-                {
-                    address: 'R. Jacarandá, 13 - Londrina/PR',
-                    date: '10/04/17'
-                },
-                {
-                    address: 'Av. Leste Oeste, 345 - Londrina/PR',
-                    date: '11/04/17'
-                },
-                {
-                    address: 'R. Matanha, 32 - São Paulo/SP',
-                    date: '12/04/17'
-                }
-            ]
+            places: []
         }
     }
 
@@ -38,13 +29,16 @@ export default class TravelScreen extends Component<Props> {
         return <View style={styles.container}>
             <FlatList
                 data={this.state.places}
-                renderItem={ place => <SimplePlace {...place} />}
+                renderItem={ ({item}) => <SimplePlace place={item} />}
                 keyExtractor={(item, index) => index.toString()}
                 style={{ flex: 1 }}
             />
             <Button title='Adicionar local'
                 onPress={() => this.setState({ visibleModal: true })}
-                />
+            />
+            <Button title='Registrar'
+                onPress={() => this._touchSave()}
+            />
 
             <Modal visible={this.state.visibleModal} 
                 onRequestClose={() => this.setState({visibleModal:false})}
@@ -60,10 +54,10 @@ export default class TravelScreen extends Component<Props> {
                 <Text>Local</Text>
                 <FormInput
                     placeholder='Endereço'
-                    onChangeText={text => this.setState({address: text})} />
+                    onChangeText={(address) => this.setState({address})} />
                 <FormInput
                     placeholder='Data'
-                    onChangeText={text => this.setState({date: text})} />
+                    onChangeText={(date) => this.setState({date})} />
                 <View style={styles.buttons}>
                     <Button 
                         style={styles.btnNeutral}
@@ -82,15 +76,30 @@ export default class TravelScreen extends Component<Props> {
 
     _touchAdd = () => {
         this.setState({
-            places: [...this.state.places, 
+            places: [...this.state.places,
                 {
                     address: this.state.address,
-                    date: this.state.date
+                    date: this.state.date,
+                    restaurants: [],
+                    weather: null,
+                    notifications: []
                 }],
-            address:'',
-            date:'',
-            visibleModal:false
+            address: '',
+            date: '',
+            visibleModal: false})
+    }
+
+    _touchSave = () => {
+        this.state.places.forEach(item => {
+            PlaceServices.insert(item)
         })
+        let travel = {
+            user: UserServices.selectCache(),
+            places: this.state.places
+        }
+        TravelServices.insert({...travel})
+
+        this.props.navigation.goBack()
     }
 }
 

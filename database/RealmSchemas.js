@@ -1,5 +1,6 @@
 import Realm from 'realm'
 export const USER_SCHEMA = 'User'
+export const CACHE_USER_SCHEMA = 'CacheUser'
 const TRAVEL_SCHEMA = 'Travel'
 const PLACE_SCHEMA = 'Place'
 const RESTAURANT_SCHEMA = 'Restaurant'
@@ -20,16 +21,38 @@ const UserSchema = {
     }
 }
 
-/*export const TravelSchema = {
+const CacheUserSchema = {
+    name: CACHE_USER_SCHEMA,
+    properties: {
+        idUser: 'int'
+    }
+}
+
+const TravelSchema = {
     name: TRAVEL_SCHEMA,
     primaryKey: 'id',
     properties: {
         id: 'int',
-        users: (USER_SCHEMA + '[]')
+        user: USER_SCHEMA,
+        places: (PLACE_SCHEMA + '[]')
     }
 }
 
-export const WeatherSchema = {
+const PlaceSchema = {
+    name: PLACE_SCHEMA,
+    primaryKey: 'id',
+    properties: {
+        id: 'int',
+        address: 'string',
+        /*date: 'date',*/
+        date: 'string',
+        restaurants: (RESTAURANT_SCHEMA + '[]'),
+        weather: (WEATHER_SCHEMA + '?'),
+        notifications: (NOTIFICATION_SCHEMA + '[]')
+    }
+}
+
+const WeatherSchema = {
     name: WEATHER_SCHEMA,
     primaryKey: 'id',
     properties: {
@@ -40,19 +63,7 @@ export const WeatherSchema = {
     }
 }
 
-export const PlaceSchema = {
-    name: PLACE_SCHEMA,
-    primaryKey: 'id',
-    properties: {
-        id: 'int',
-        address: 'string',
-        date: 'date',
-        weather: WEATHER_SCHEMA + '?',
-        travel: TRAVEL_SCHEMA
-    }
-}
-
-export const RestaurantSchema = {
+const RestaurantSchema = {
     name: RESTAURANT_SCHEMA,
     primaryKey: 'id',
     properties: {
@@ -60,28 +71,28 @@ export const RestaurantSchema = {
         title: 'string',
         description: 'string',
         address: 'string',
-        image: 'string?',
-        place: PLACE_SCHEMA
+        image: 'string?'
     }
 }
 
-export const NotificationSchema = {
+const NotificationSchema = {
     name: NOTIFICATION_SCHEMA,
     primaryKey: 'id',
     properties: {
+        id: 'int',
         level: 'int',
         message: 'string',
-        status: 'int',
-        place: PLACE_SCHEMA
+        status: 'int'
     }
-}*/
+}
 
-const schemas = [UserSchema/*, 
-                TRAVEL_SCHEMA, 
-                PLACE_SCHEMA, 
-                RESTAURANT_SCHEMA, 
-                WEATHER_SCHEMA, 
-                NOTIFICATION_SCHEMA*/]
+const schemas = [UserSchema,
+                CacheUserSchema, 
+                TravelSchema, 
+                PlaceSchema, 
+                RestaurantSchema, 
+                WeatherSchema, 
+                NotificationSchema]
 
 export default new Realm({schema : schemas})
 

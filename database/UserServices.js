@@ -12,10 +12,13 @@ let UserServices = {
 
         Db.write(() => Db.create('User', user, true))
     },
+    select: (id) => {
+        let res = Db.objects('User').filtered('id = $0', id)
+        return Object.keys(res).length !== 0 ? res[0] : null
+    },
     auth: (email, pass) => {
-        console.log(Db.objects('User'))
         let res = Db.objects('User').filtered('email = "' + email + '" AND pass = "' + pass + '"')
-        return Object.keys(res).length !== 0 ? res[0] : false
+        return Object.keys(res).length !== 0 ? res[0] : null
     }, 
     update: (user) => {
         Db.write(() => {
@@ -26,8 +29,20 @@ let UserServices = {
             uUser.date_birth = user.date_birth
             uUser.phone = user.phone
         })
-    }
-    
+    },
+    insertCache: (cUser) => {
+        let res = Db.objects('CacheUser')
+        Db.write(() => {
+            if (Object.keys(res).length === 0)
+                Db.create('CacheUser', {idUser: cUser.id})
+            else 
+                res[0].idUser = cUser.id
+        })
+    },
+    selectCache: () => {
+        let userId = Db.objects('CacheUser')[0].idUser
+        return Db.objects('User').filtered('id = $0', userId)[0]
+    }  
 }
 
 module.exports = UserServices

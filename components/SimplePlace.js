@@ -12,12 +12,12 @@ export default class SimplePlace extends Component<Props>{
     render(){
         return <View style={styles.container}>
                 <View style={styles.panelAddress}>
-                    <Text>{this.props.item.address}</Text>
+                    <Text>{this.props.place.address}</Text>
                     <Icon name="times" size={25} color="black" />
                 </View>
                 <View style={styles.horizontalLine}/>
                 <View style={styles.panelDate}>
-                    <Text>{this.props.item.date}</Text>
+                    <Text>{this.props.place.date}</Text>
                 </View>
             </View>
     }

@@ -20,25 +20,19 @@ import TravelListScreen from './TravelListScreen'
 
 import { DrawerNavigator } from 'react-navigation'
 
+import UserServices from '../database/UserServices'
+
 type Props = {};
 class HomeScreen extends Component<Props> {
 
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: [{ title: 'Title Text', key: 'item1' }, 
-            { title: 'Title Text2', key: 'item2' }, 
-                { title: 'Title Text3', key: 'item3' },
-                { title: 'Title Text4', key: 'item4' },
-                { title: 'Title Text5', key: 'item5' },
-                { title: 'Title Text6', key: 'item6' },
-                { title: 'Title Text7', key: 'item7' },
-                { title: 'Title Text8', key: 'item8' },
-                { title: 'Title Text9', key: 'item9' }],
-            openedMenu:false
+            openedMenu:false,
+            closestTravel:[]
         };
 
-        console.log(props.navigation.state.params.user)
+        console.log(UserServices.selectCache())
     }
 
     render() {
@@ -72,8 +66,8 @@ class HomeScreen extends Component<Props> {
                 </View>
             </View>
             <FlatList horizontal
-                data={this.state.dataSource}
-                renderItem={({ item }) => <Travel text={item.title}/>}
+                data={this.state.closestTravel}
+                renderItem={({ travel }) => <Travel travel={travel}/>}
                 keyExtractor={(item,index) => index.toString()}
                 style={{flex:1}}
                 />

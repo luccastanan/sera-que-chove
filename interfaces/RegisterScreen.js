@@ -22,11 +22,11 @@ export default class RegisterScreen extends Component<Props> {
     constructor(props){
         super(props)
         this.state={
-            name: '',
-            email:'',
-            pass:'',
-            dateBirth:'',
-            phone:'',
+            name: 'Luccas',
+            email:'l@g.com',
+            pass:'123',
+            dateBirth:'19/12/97',
+            phone:'999991234',
         }
     }
 

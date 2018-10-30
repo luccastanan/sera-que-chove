@@ -57,10 +57,12 @@ export default class LoginScreen extends Component<Props> {
 
     _touchLogin = () => {
         let user = UserServices.auth(this.state.email, this.state.pass)
-        if (user) 
-            this.props.navigation.navigate('Home', {user})
-        else 
+        if (user) {
+            UserServices.insertCache(user)
+            this.props.navigation.navigate('Home')
+        }else {
             Alert.alert('Atenção', 'Dados inválidos')
+        }
     }
 
     _touchRegister = () => {

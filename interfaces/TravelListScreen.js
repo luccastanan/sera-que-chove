@@ -17,36 +17,44 @@ import Travel from '../components/Travel'
 import RNPopover from 'react-native-popover-menu';
 import Icon from 'react-native-vector-icons/SimpleLineIcons'
 import ActionButton from 'react-native-action-button';
+
+import UserServices from '../database/UserServices'
+import TravelServices from '../database/TravelServices'
+
+import Swipeout from 'react-native-swipeout'
+
 type Props = {};
 export default class HomeScreen extends Component<Props> {
 
     constructor() {
         super();
+
+        let travels = TravelServices.selectAll(UserServices.selectCache())
+        travels = travels == null ? [] : travels.map(x => Object.assign({}, x))
+
         this.state = {
-            dataSource: [{ title: 'Title Text', key: 'item1' },
-            { title: 'Title Text2', key: 'item2' },
-            { title: 'Title Text3', key: 'item3' },
-            { title: 'Title Text4', key: 'item4' },
-            { title: 'Title Text5', key: 'item5' },
-            { title: 'Title Text6', key: 'item6' },
-            { title: 'Title Text7', key: 'item7' },
-            { title: 'Title Text8', key: 'item8' },
-            { title: 'Title Text9', key: 'item9' }],
+            travelList: travels,
             openedMenu: false
         };
+
+        console.log(travels)
     }
 
     render() {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={this.state.dataSource}
-                    renderItem={({ item }) => <Travel text={item.title} />}
+                    data={this.state.travelList}
+                    renderItem={({ item }) => 
+                        <Swipeout right={[{text:'Alterar', type:'primary'}, {text:'Excluir', type:'delete'}]}>
+                            <Travel travel={item} />
+                        </Swipeout>
+                    }
                     keyExtractor={(item, index) => index.toString()}
                     style={{ flex: 1 }}
                 />
-                <ActionButton 
-                    buttonColor="rgba(231,76,60,1)" 
+                <Button 
+                    title='Nova Viagem'
                     onPress={() => this.props.navigation.navigate('Travel')}
                     />
             </View>

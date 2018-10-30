@@ -7,14 +7,14 @@ export default class FullPlace extends Component<Props>{
     render(){
         return <View style={styles.container}>
                 <View style={styles.infoPanel}>
-                    <Text>{this.props.item.address}</Text>
-                    <Text>{this.props.item.date}</Text>
+                    <Text>{this.props.place.address}</Text>
+                    <Text>{this.props.place.date}</Text>
                 </View>
                 <View style={styles.weatherPanel}>
-                    <Text style={styles.weatherCurrent}>{this.props.item.weather.current}</Text>
+                <Text style={styles.weatherCurrent}>{this.props.place.weather ? this.props.place.weather.current : '---'}</Text>
                     <View style={styles.mmPanel}>
-                        <Text>▲ {this.props.item.weather.max}</Text>
-                        <Text>▼ {this.props.item.weather.min}</Text>
+                    <Text>▲ {this.props.place.weather ? this.props.place.weather.max : '---'}</Text>
+                    <Text>▼ {this.props.place.weather ? this.props.place.weather.max : '---'}</Text>
                     </View>
                 </View>
             </View>

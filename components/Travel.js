@@ -8,38 +8,13 @@ export default class Travel extends Component<Props> {
 
 	constructor(props){
 		super(props)
-		this.state = {
-			places: [
-				{ address:'R. Belém, 190',
-					weather:{
-						current:21,
-						max:27,
-						min:20
-					}
-				}, {
-					address: 'Av. So Paulo, 848',
-					weather: {
-						current: 19,
-						max: 24,
-						min: 15
-					}
-				}, {
-					address: 'R. Jacarandá, 866',
-					weather: {
-						current: 30,
-						max: 35,
-						min: 29
-					}
-				}
-			]
-		}
 	}
 
 	render(){
 		return <View style={styles.container}>
 			<FlatList 
-				data={this.state.places}
-				renderItem={ place => <FullPlace {...place} />}
+				data={this.props.travel.places.map(x => Object.assign({}, x))}
+				renderItem={ ({item}) => <FullPlace place={item} />}
 				keyExtractor={(item, index) => index.toString()}
 				style={{ flex: 1 }}
 			/>
