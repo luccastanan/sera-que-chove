@@ -1,4 +1,6 @@
 rootProject.name = 'SeraQueChove'
+include ':react-native-google-places'
+project(':react-native-google-places').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-google-places/android')
 include ':realm'
 project(':realm').projectDir = new File(rootProject.projectDir, '../node_modules/realm/android')
 include ':react-native-popover-menu'

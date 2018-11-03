@@ -21,7 +21,7 @@ import ActionButton from 'react-native-action-button';
 import UserServices from '../database/UserServices'
 import TravelServices from '../database/TravelServices'
 
-import Swipeout from 'react-native-swipeout'
+import Swipeout from 'react-native-swipeout' 
 
 type Props = {};
 export default class HomeScreen extends Component<Props> {

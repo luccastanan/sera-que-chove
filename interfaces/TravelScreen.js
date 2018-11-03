@@ -11,6 +11,8 @@ import TravelServices from '../database/TravelServices'
 import PlaceServices from '../database/PlaceServices'
 import UserServices from '../database/UserServices'
 
+import RNGooglePlaces from 'react-native-google-places';
+
 
 type Props = {}
 export default class TravelScreen extends Component<Props> {
@@ -67,7 +69,7 @@ export default class TravelScreen extends Component<Props> {
                     <Button
                         style={styles.btnPositive}
                         title='Adicionar'
-                        onPress={() => this._touchAdd()}
+                        onPress={() => this._touchModalAdd()}
                         />
                 </View>
             </View>
@@ -75,6 +77,15 @@ export default class TravelScreen extends Component<Props> {
     }
 
     _touchAdd = () => {
+        //this.setState({ visibleModal: true })
+        RNGooglePlaces.openAutocompleteModal()
+    .then((place) => {
+		console.log(place);
+    })
+    .catch(error => console.log(error.message)); 
+    }
+
+    _touchModalAdd = () => {
         this.setState({
             places: [...this.state.places,
                 {

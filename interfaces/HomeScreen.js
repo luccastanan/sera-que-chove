@@ -22,6 +22,10 @@ import { DrawerNavigator } from 'react-navigation'
 
 import UserServices from '../database/UserServices'
 
+import { URL, WEATHER_KEY} from '../Constants'
+
+import Util from '../Utilities'
+
 type Props = {};
 class HomeScreen extends Component<Props> {
 
@@ -29,7 +33,13 @@ class HomeScreen extends Component<Props> {
         super(props);
         this.state = {
             openedMenu:false,
-            closestTravel:[]
+            closestTravel:[],
+            currentWeather: 24,
+            currentMax: 28,
+            currentMin:22,
+            tomorrowWeather: 16,
+            tomorrowMax: 22,
+            tomorrowMin: 14
         };
 
         console.log(UserServices.selectCache())
@@ -45,10 +55,10 @@ class HomeScreen extends Component<Props> {
                         <Text>Londrina</Text>
                     </View>
                     <View style={styles.panelWeather}>
-                        <Text style={styles.panelCurrent}>* 24</Text>
+                        <Text style={styles.panelCurrent}>{this.state.currentWeather}</Text>
                         <View style={styles.panelMM}>
-                            <Text>▲ 28º</Text>
-                            <Text>▼ 22º</Text>
+                            <Text>▲ {this.state.currentMax}º</Text>
+                            <Text>▼ {this.state.currentMin}º</Text>
                         </View>
                     </View>
                 </View>
@@ -57,10 +67,10 @@ class HomeScreen extends Component<Props> {
                             <Text>Amanhã</Text>
                         </View> 
                     <View style={styles.panelBottomWeather}>
-                        <Text style={styles.panelBottomCurrent}>* 16</Text>
+                        <Text style={styles.panelBottomCurrent}>{this.state.tomorrowWeather}</Text>
                         <View style={styles.panelBottomMM}>
-                            <Text>▲ 28º</Text>
-                            <Text>▼ 22º</Text>
+                            <Text>▲ {this.state.tomorrowMax}º</Text>
+                            <Text>▼ {this.state.tomorrowMin}º</Text>
                         </View>
                     </View>
                 </View>
@@ -77,6 +87,22 @@ class HomeScreen extends Component<Props> {
 
     componentDidMount() {
         Orientation.lockToPortrait();
+        fetch(`${URL}?q=Londrina,br&appid=${WEATHER_KEY}`)
+        .then(resp => {
+            if (!resp.ok) 
+                throw new Error('Problema na requisição')
+            return resp.json()
+        }).then(body => {
+            this.setState(
+                {
+                    currentWeather: Util.kToC(body.main.temp),
+                    currentMax: Util.kToC(body.main.temp_max),
+                    currentMin: Util.kToC(body.main.temp_min)
+                }
+            )
+        }).catch(error => {
+            console.log(error.toString())
+        })
     }
 }
 
