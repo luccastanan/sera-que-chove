@@ -7,14 +7,13 @@
      */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, Alert} from 'react-native';
-
-import { Button } from 'react-native-elements'
-
+import {Platform, StyleSheet, Text, View, Alert} from 'react-native';
+import { Button, Input } from 'react-native-elements'
 import Orientation from 'react-native-orientation'
-import { red } from 'ansi-colors';
 
 import UserServices from '../database/UserServices'
+import {PRIMARY_COLOR} from '../Constants'
+import baseStyles from '../style/Base'
 
 type Props = {};
 export default class LoginScreen extends Component<Props> {
@@ -28,30 +27,35 @@ export default class LoginScreen extends Component<Props> {
     }
 
     render() {
-        return <View style={styles.container}>
+        return <View style={baseStyles.container}>
             <View style={styles.panelForm}>
-                <TextInput
+                <Input
                     value={this.state.email}
-                    placeholder='E-mail'
-                    onChangeText={(text) => {this.setState({email:text})}}
+                    leftIcon={{type:'material-icons', name:'email', color:PRIMARY_COLOR}}
+                    containerStyle={baseStyles.input}
+                    placeholder='Seu e-mail'
+                    onChangeText={(email) => this.setState({ email })}
                 />
-                <TextInput
+                <Input
                     value={this.state.pass}
-                    secureTextEntry
-                    placeholder='Senha'
-                    onChangeText={(text) => { this.setState({ pass: text }) }}
+                    leftIcon={{ type: 'material-community-icons', name: 'lock', color: PRIMARY_COLOR }}
+                    containerStyle={baseStyles.input}
+                    placeholder='Seu senha'
+                    onChangeText={(pass) => this.setState({pass})}
                 />
                 <Button
                     title='Entrar'
-                    backgroundColor='#3498DB'
-                    onPress={() => this._touchLogin()} />
+                    buttonStyle={baseStyles.btnPositive}
+                    containerStyle={baseStyles.containerBtn}
+                    onPress={() => this._touchLogin()}/>
                 <Button
                     title='Cadastrar-se'
-                    onPress={() => this._touchRegister()} />
-                <Button
-                    title='Esqueci minha senha'
-                    onPress={() => this._touchForgot()} />
+                    onPress={() => this._touchRegister()} 
+                    titleStyle={baseStyles.btnNegativeText}
+                    buttonStyle={baseStyles.btnNegative}
+                    containerStyle={baseStyles.containerBtn}/>
             </View>
+            <Text style={styles.forgot} onPress={() => this._touchForgot()}>Esqueci minha senha</Text>
         </View>
     }
 
@@ -79,13 +83,15 @@ export default class LoginScreen extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F5FCFF',
-        alignItems:'center',
+    panelForm:{
+        flex:1,
+        width:300,
+        alignSelf:'center',
         justifyContent:'center'
     },
-    panelForm:{
-        width:200,
+    forgot:{
+        margin:12,
+        fontSize:16,
+        textAlign:'center'
     }
 })

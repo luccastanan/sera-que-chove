@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet} from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
+
+import { PRIMARY_COLOR } from '../Constants'
 
 type Props = {}
 export default class SimplePlace extends Component<Props>{
@@ -12,12 +14,11 @@ export default class SimplePlace extends Component<Props>{
     render(){
         return <View style={styles.container}>
                 <View style={styles.panelAddress}>
-                    <Text>{this.props.place.address}</Text>
-                    <Icon name="times" size={25} color="black" />
+                    <Text style={styles.address}>{this.props.place.address}</Text>
+                    {/*<IconMaterial.Button name="close" style={{margin:0, padding:0}} size={24} backgroundColor='transparent' color={PRIMARY_COLOR} onPress={() => this.props.delete(this.props.index)}/>*/}
                 </View>
-                <View style={styles.horizontalLine}/>
                 <View style={styles.panelDate}>
-                    <Text>{this.props.place.date}</Text>
+                    <Text style={styles.date}>{this.props.place.date}</Text>
                 </View>
             </View>
     }
@@ -27,21 +28,29 @@ const styles = StyleSheet.create({
     container:{
         flexDirection:'column',
         borderWidth:0.5,
-        borderColor: 'black',
+        borderColor: PRIMARY_COLOR,
         borderRadius:5,
-        padding:8,
-        marginBottom:8
+        margin: 8
     },
     panelAddress:{
         flexDirection:'row',
         justifyContent:'space-between',
         alignItems:'center'
     },
-    panelDate: {
-        alignItems:'center'
+    address:{
+        color:PRIMARY_COLOR,
+        margin: 8,
+        fontSize:16
     },
-    horizontalLine:{
-        borderBottomColor: 'black',
-        borderBottomWidth:0.5
+    panelDate: {
+        alignItems:'center',
+        backgroundColor:PRIMARY_COLOR
+    },
+    date:{
+        color:'white',
+        marginLeft: 8,
+        marginTop:4,
+        marginEnd: 8,
+        marginBottom: 4
     }
 })

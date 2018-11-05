@@ -3,3 +3,4 @@ export const GOOGLE_KEY = 'AIzaSyBcmZaDotjptDnBOpEqfD6y4l_siI513zA'
 export const URL = 'http://api.openweathermap.org/data/2.5/weather'
 
 export const KELVIN = 273.15
+export const PRIMARY_COLOR = '#3498DB'

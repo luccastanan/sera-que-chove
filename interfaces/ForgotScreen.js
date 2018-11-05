@@ -7,12 +7,12 @@
      */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput} from 'react-native';
-
-import { Button } from 'react-native-elements'
-
+import {StyleSheet, View} from 'react-native';
+import { Button, Input } from 'react-native-elements'
 import Orientation from 'react-native-orientation'
-import { red } from 'ansi-colors';
+
+import baseStyles from '../style/Base'
+import {PRIMARY_COLOR} from '../Constants'
 
 type Props = {};
 export default class ForgotScreen extends Component<Props> {
@@ -27,13 +27,18 @@ export default class ForgotScreen extends Component<Props> {
     render() {
         return <View style={styles.container}>
             <View style={styles.panelForm}>
-                <TextInput
-                    placeholder='E-mail'
-                    onChangeText={(text) => {this.setState({email:text})}}
+
+                <Input
+                    leftIcon={{ type: 'material-icons', name: 'email', color: PRIMARY_COLOR }}
+                    containerStyle={baseStyles.input}
+                    placeholder='Seu e-mail'
+                    onChangeText={(email) => this.setState({ email })}
                 />
+
                 <Button
                     title='Enviar'
-                    backgroundColor='#3498DB'
+                    buttonStyle={baseStyles.btnPositive}
+                    containerStyle={baseStyles.containerBtn}
                     onPress={() => this._touchSend()} />
             </View>
         </View>

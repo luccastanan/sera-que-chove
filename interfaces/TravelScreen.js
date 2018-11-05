@@ -1,124 +1,111 @@
 
 import React, {Component} from 'react'
-import {FlatList, View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native'
+import {FlatList, View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native'
 
 import {Button, FormInput} from 'react-native-elements'
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
+import Swipeout from 'react-native-swipeout' 
 
 import SimplePlace from '../components/SimplePlace'
-
 import TravelServices from '../database/TravelServices'
-
 import PlaceServices from '../database/PlaceServices'
 import UserServices from '../database/UserServices'
 
-import RNGooglePlaces from 'react-native-google-places';
-
+import TextEmptyList from '../components/TextEmptyList'
+import baseStyles from '../style/Base'
+import { PRIMARY_COLOR } from '../Constants'
 
 type Props = {}
 export default class TravelScreen extends Component<Props> {
 
+    static navigationOptions = ({ navigation }) => {
+        return ({
+            title:(navigation.getParam('cmd', 0) == 0 ? 'Nova viagem' : 'Viagem'),
+            headerRight: (
+                <IconMaterial.Button name="check" size={30} backgroundColor='transparent' color={PRIMARY_COLOR} onPress={() => navigation.getParam('touchRegister')()} />
+            )
+        })
+    }
+
     constructor(props){
         super(props)
         this.state={
-            visibleModal: false,
-            address: '',
-            date: '',
-            places: []
+            places: [{
+                address:'São Paulo/SP',
+                date:'11/10/2018'
+            }]
         }
     }
 
     render(){
-        return <View style={styles.container}>
+        return <View style={baseStyles.container}>
             <FlatList
                 data={this.state.places}
-                renderItem={ ({item}) => <SimplePlace place={item} />}
+                renderItem={ ({item, index}) => (
+                    <Swipeout backgroundColor='white' right={[{ text: 'Excluir', type: 'delete', onPress: () => this._delete(index) }]}>
+                        <SimplePlace place={item} />
+                    </Swipeout>
+                )}
                 keyExtractor={(item, index) => index.toString()}
                 style={{ flex: 1 }}
             />
-            <Button title='Adicionar local'
-                onPress={() => this.setState({ visibleModal: true })}
+            <TextEmptyList 
+                style={{flex:1}}
+                text='Sem locais salvos'
+                visible={this.state.places.length == 0 ? true : false}
             />
-            <Button title='Registrar'
-                onPress={() => this._touchSave()}
-            />
-
-            <Modal visible={this.state.visibleModal} 
-                onRequestClose={() => this.setState({visibleModal:false})}
-                transparent >
-                {this._createModal()}
-            </Modal>
+            <Button
+                title='Adicionar local'
+                buttonStyle={baseStyles.btnPositive}
+                containerStyle={baseStyles.containerBtn}
+                onPress={() => this._touchAddPlace()} 
+                />
         </View>
     }
 
-    _createModal = () => {
-        return <View style={styles.modal}>
-            <View style={styles.modalContainer}>
-                <Text>Local</Text>
-                <FormInput
-                    placeholder='Endereço'
-                    onChangeText={(address) => this.setState({address})} />
-                <FormInput
-                    placeholder='Data'
-                    onChangeText={(date) => this.setState({date})} />
-                <View style={styles.buttons}>
-                    <Button 
-                        style={styles.btnNeutral}
-                        title='Cancelar'
-                        onPress={() => this.setState({visibleModal:false})}
-                        />
-                    <Button
-                        style={styles.btnPositive}
-                        title='Adicionar'
-                        onPress={() => this._touchModalAdd()}
-                        />
-                </View>
-            </View>
-        </View>
+    componentWillMount(){
+        this.props.navigation.setParams({ touchRegister: () => this._touchRegister() })
     }
 
-    _touchAdd = () => {
-        //this.setState({ visibleModal: true })
-        RNGooglePlaces.openAutocompleteModal()
-    .then((place) => {
-		console.log(place);
-    })
-    .catch(error => console.log(error.message)); 
+    _delete = (index) => {
+        let cPlaces = this.state.places
+        cPlaces.splice(index, 1)
+        this.setState({places: cPlaces})
     }
 
-    _touchModalAdd = () => {
+    _touchAddPlace = () => this.props.navigation.navigate('PlaceAdd', { handleAdd: (place) => this._handlerAdd(place) })
+
+    _handlerAdd = (place) => {
         this.setState({
             places: [...this.state.places,
                 {
-                    address: this.state.address,
-                    date: this.state.date,
+                    ...place,
                     restaurants: [],
                     weather: null,
                     notifications: []
-                }],
-            address: '',
-            date: '',
-            visibleModal: false})
+                }]
+            })
     }
 
-    _touchSave = () => {
-        this.state.places.forEach(item => {
-            PlaceServices.insert(item)
-        })
-        let travel = {
-            user: UserServices.selectCache(),
-            places: this.state.places
-        }
-        TravelServices.insert({...travel})
+    _touchRegister = () => {
+        if (this.state.places.length == 0){
+            Alert.alert('Atenção','É necessário adicionar pelo menos um local no roteiro da viagem')
+        }else{
+            this.state.places.forEach(item => {
+                PlaceServices.insert(item)
+            })
+            let travel = {
+                user: UserServices.selectCache(),
+                places: this.state.places
+            }
+            TravelServices.insert({...travel})
 
-        this.props.navigation.goBack()
+            this.props.navigation.goBack()
+        }
     }
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        padding:8
-    },
     modal: {
         flex: 1,
         flexDirection: 'column',
@@ -131,15 +118,5 @@ const styles = StyleSheet.create({
         height: 170,
         backgroundColor: 'white',
         borderRadius: 2
-    },
-    buttons:{
-        flexDirection:'row',
-        flex:1,
-    },
-    btnNeutral:{
-        width:'50%'
-    },
-    btnPositive:{
-        width:'50%'
     }
 })

@@ -5,7 +5,6 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.arttitude360.reactnative.rngoogleplaces.RNGooglePlacesPackage;
 import io.realm.react.RealmReactPackage;
-import ui.popovermenu.RNPopoverMenuPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.facebook.react.ReactNativeHost;
@@ -30,7 +29,6 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new RNGooglePlacesPackage(),
             new RealmReactPackage(),
-            new RNPopoverMenuPackage(),
             new VectorIconsPackage(),
             new OrientationPackage()
       );

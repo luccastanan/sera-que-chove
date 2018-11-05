@@ -10,21 +10,29 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 
 import Orientation from 'react-native-orientation'
-import { red } from 'ansi-colors';
 import { Button } from 'react-native-elements'
-import Travel from '../components/Travel'
+import Swipeout from 'react-native-swipeout' 
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
 
-import RNPopover from 'react-native-popover-menu';
-import Icon from 'react-native-vector-icons/SimpleLineIcons'
-import ActionButton from 'react-native-action-button';
+import Travel from '../components/Travel'
+import TextEmptyList from '../components/TextEmptyList'
 
 import UserServices from '../database/UserServices'
 import TravelServices from '../database/TravelServices'
 
-import Swipeout from 'react-native-swipeout' 
+import baseStyle from '../style/Base'
+import {PRIMARY_COLOR} from '../Constants'
 
 type Props = {};
 export default class HomeScreen extends Component<Props> {
+
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerRight: (
+                <IconMaterial.Button name="plus" size={30} backgroundColor='transparent' color={PRIMARY_COLOR} onPress={() => navigation.navigate('Travel', {cmd:0})} />
+            )
+        }
+    }
 
     constructor() {
         super();
@@ -42,7 +50,7 @@ export default class HomeScreen extends Component<Props> {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={baseStyle.container}>
                 <FlatList
                     data={this.state.travelList}
                     renderItem={({ item }) => 
@@ -53,10 +61,11 @@ export default class HomeScreen extends Component<Props> {
                     keyExtractor={(item, index) => index.toString()}
                     style={{ flex: 1 }}
                 />
-                <Button 
-                    title='Nova Viagem'
-                    onPress={() => this.props.navigation.navigate('Travel')}
-                    />
+                <TextEmptyList
+                    style={{ flex: 1 }}
+                    text='Sem viagens registradas'
+                    visible={this.state.travelList.length == 0 ? true : false}
+                /> 
             </View>
         );
     }
@@ -71,10 +80,6 @@ export default class HomeScreen extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F5FCFF',
-    },
     panel: {
         height: 200,
         backgroundColor: 'gray'

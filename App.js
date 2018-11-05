@@ -11,16 +11,17 @@ import Login from './interfaces/LoginScreen'
 import Register from './interfaces/RegisterScreen'
 import Forgot from './interfaces/ForgotScreen'
 import Travel from './interfaces/TravelScreen'
+import TravelList from './interfaces/TravelListScreen'
+import PlaceAdd from './interfaces/PlaceAddScreen'
 import {createStackNavigator} from 'react-navigation'
-
-import { Icon } from 'react-native-elements'
 
 export default createStackNavigator(
 	{
 		Home : {
 			screen: Home,
 			navigationOptions:{
-				title:'Home'
+				title: 'Home',
+				headerLeft: null
 			}
 		},
 		Login:{
@@ -40,9 +41,18 @@ export default createStackNavigator(
 			}
 		},
 		Travel: {
-			screen: Travel,
+			screen: Travel
+		},
+		TravelList: {
+			screen: TravelList,
 			navigationOptions: {
-				title: 'Viagem'
+				title: 'Viagens'
+			}
+		},
+		PlaceAdd: {
+			screen: PlaceAdd,
+			navigationOptions:{
+				title:'Local'
 			}
 		}
 	}, {

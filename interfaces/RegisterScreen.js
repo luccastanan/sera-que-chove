@@ -9,12 +9,13 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, TextInput, Alert} from 'react-native';
 
-import { Button } from 'react-native-elements'
+import { Button, Input } from 'react-native-elements'
 
 import Orientation from 'react-native-orientation'
-import { red } from 'ansi-colors';
 
 import UserServices from '../database/UserServices'
+import baseStyles from '../style/Base'
+import {PRIMARY_COLOR} from '../Constants'
 
 type Props = {};
 export default class RegisterScreen extends Component<Props> {
@@ -33,35 +34,41 @@ export default class RegisterScreen extends Component<Props> {
     render() {
         return <View style={styles.container}>
             <View style={styles.panelForm}>
-                <TextInput
-                    value={this.state.name}
-                    placeholder='Nome'
-                    onChangeText={(name) => {this.setState({name})}}
+                <Input
+                    leftIcon={{ type: 'material-icons', name: 'person', color: PRIMARY_COLOR }}
+                    containerStyle={baseStyles.input}
+                    placeholder='Seu nome'
+                    onChangeText={(name) => this.setState({ name })}
                 />
-                <TextInput
-                    value={this.state.email}
-                    placeholder='E-mail'
-                    onChangeText={(email) => { this.setState({ email }) }}
+                <Input
+                    leftIcon={{ type: 'material-icons', name: 'email', color: PRIMARY_COLOR }}
+                    containerStyle={baseStyles.input}
+                    placeholder='Seu e-mail'
+                    onChangeText={(email) => this.setState({ email })}
                 />
-                <TextInput
-                    value={this.state.pass}
-                    secureTextEntry
-                    placeholder='Senha'
-                    onChangeText={(pass) => { this.setState({ pass }) }}
+                <Input
+                    leftIcon={{ type: 'material-community-icons', name: 'lock', color: PRIMARY_COLOR }}
+                    containerStyle={baseStyles.input}
+                    placeholder='Sua senha'
+                    onChangeText={(pass) => this.setState({ pass })}
                 />
-                <TextInput
-                    value={this.state.dateBirth}
-                    placeholder='Data de nascimento'
-                    onChangeText={(dateBirth) => { this.setState({ dateBirth }) }}
+
+                <Input
+                    leftIcon={{ type: 'material-icons', name: 'date-range', color: PRIMARY_COLOR }}
+                    containerStyle={baseStyles.input}
+                    placeholder='Sua data de nascimento'
+                    onChangeText={(dateBirth) => this.setState({ dateBirth })}
                 />
-                <TextInput
-                    value={this.state.phone}
-                    placeholder='Celular'
-                    onChangeText={(phone) => { this.setState({ phone }) }}
+                <Input
+                    leftIcon={{ type: 'material-icons', name: 'phone-android', color: PRIMARY_COLOR }}
+                    containerStyle={baseStyles.input}
+                    placeholder='Seu celular'
+                    onChangeText={(phone) => this.setState({ phone })}
                 />
                 <Button
                     title='Cadastrar'
-                    backgroundColor='#3498DB'
+                    buttonStyle={baseStyles.btnPositive}
+                    containerStyle={baseStyles.containerBtn}
                     onPress={() => this._touchRegister()} />
             </View>
         </View>
@@ -89,6 +96,6 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     panelForm:{
-        width:200,
+        width:300,
     }
 })
