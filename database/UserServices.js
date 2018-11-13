@@ -1,6 +1,6 @@
 import Db from './RealmSchemas'
 
-let UserServices = {
+export default UserServices = {
     insert: (user) => {
         let res = Db.objects('User')
         if (Object.keys(res).length === 0){
@@ -44,8 +44,6 @@ let UserServices = {
         return Db.objects('User').filtered('id = $0', userId)[0]
     }  
 }
-
-module.exports = UserServices
 
 /*export const updateUser = (user) => new Promise((resolve, reject) => {
     Realm.open(dbOptions)

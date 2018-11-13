@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { Platform, StyleSheet, Text, View, FlatList, TouchableOpacity, Alert } from 'react-native';
 
 import Orientation from 'react-native-orientation'
 import { Button } from 'react-native-elements'
@@ -22,30 +22,55 @@ import TravelServices from '../database/TravelServices'
 
 import baseStyle from '../style/Base'
 import {PRIMARY_COLOR} from '../Constants'
+import Util from '../Utilities';
 
-type Props = {};
-export default class HomeScreen extends Component<Props> {
+export default class HomeScreen extends Component {
 
-    static navigationOptions = ({ navigation }) => {
+    /*static navigationOptions = ({ navigation }) => {
         return {
             headerRight: (
                 <IconMaterial.Button name="plus" size={30} backgroundColor='transparent' color={PRIMARY_COLOR} onPress={() => navigation.navigate('Travel', {cmd:0})} />
             )
         }
-    }
+    }*/
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props)
 
-        let travels = TravelServices.selectAll(UserServices.selectCache())
-        travels = travels == null ? [] : travels.map(x => Object.assign({}, x))
+        let travelsCollection = TravelServices.selectAll(UserServices.selectCache())
+        travelsCollection.addListener((travels, changes) => {
+            changes.insertions.forEach(index => {
+                let travelI = travels[index]
+                this.setState({ travelList: [...this.state.travelList, travelI]})
+            })
+            changes.modifications.forEach(index => {
+                let travelM = travels[index]
+                let cTravelList = this.state.travelList
+                let travelIndex = -1
+                cTravelList.forEach((travel, index) => {
+                    if (travel.id == travelM.id) {
+                        travelIndex = index
+                        return
+                    }
+                })
+                if (travelIndex > -1) {
+                    cTravelList.splice(travelIndex, 1, travelM)
+                    this.setState({ travelList: cTravelList })
+                }
+            })
+
+            changes.deletions.forEach(index => {
+                let cTravelList = this.state.travelList
+                cTravelList.splice(index,1)
+                this.setState({ travelList: cTravelList })
+            })
+        })
+        let travels = Object.keys(travelsCollection).length == 0 ? [] : travelsCollection.map(x => Object.assign({}, x))
 
         this.state = {
             travelList: travels,
             openedMenu: false
         };
-
-        console.log(travels)
     }
 
     render() {
@@ -54,8 +79,8 @@ export default class HomeScreen extends Component<Props> {
                 <FlatList
                     data={this.state.travelList}
                     renderItem={({ item }) => 
-                        <Swipeout right={[{text:'Alterar', type:'primary'}, {text:'Excluir', type:'delete'}]}>
-                            <Travel travel={item} />
+                        <Swipeout autoClose backgroundColor='white' right={[{text:'Alterar', type:'primary'}, {text:'Excluir', type:'delete', onPress: () => this._delete(item)}]}>
+                            <Travel travel={item} onSeeMore={(place) => this._touchSeeMoreRestaurants(Util.mapToList(place.restaurants))} />
                         </Swipeout>
                     }
                     keyExtractor={(item, index) => index.toString()}
@@ -70,8 +95,20 @@ export default class HomeScreen extends Component<Props> {
         );
     }
 
+    _delete = (travel) => {
+        Alert.alert('Atenção', 'Tem certeza que deseja apagar essa viagem?',
+        [
+            { text: 'Cancelar' },
+            { text: 'Sim', onPress: () => TravelServices.delete(travel)}
+        ])
+    }
+
     _touchAllTravels = () => {
         this.props.navigation.navigate('Login')
+    }
+
+    _touchSeeMoreRestaurants = (restaurants) => {
+        this.props.navigation.navigate('RestaurantList', { restaurants})
     }
 
     componentDidMount() {

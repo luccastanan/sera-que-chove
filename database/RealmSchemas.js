@@ -69,7 +69,7 @@ const RestaurantSchema = {
     properties: {
         id: 'int',
         title: 'string',
-        description: 'string',
+        rating: {type: 'float?', default:0},
         address: 'string',
         image: 'string?'
     }

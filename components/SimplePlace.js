@@ -4,8 +4,7 @@ import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { PRIMARY_COLOR } from '../Constants'
 
-type Props = {}
-export default class SimplePlace extends Component<Props>{
+export default class SimplePlace extends Component{
 
     constructor(props){
         super(props)

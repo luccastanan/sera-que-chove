@@ -14,8 +14,7 @@ import Orientation from 'react-native-orientation'
 import baseStyles from '../style/Base'
 import {PRIMARY_COLOR} from '../Constants'
 
-type Props = {};
-export default class ForgotScreen extends Component<Props> {
+export default class ForgotScreen extends Component {
 
     constructor(props){
         super(props)

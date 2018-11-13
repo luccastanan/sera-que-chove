@@ -11,9 +11,7 @@ import IconMaterialCM from 'react-native-vector-icons/MaterialCommunityIcons'
 import baseStyles from '../style/Base'
 import { PRIMARY_COLOR } from '../Constants'
 
-
-type Props = {}
-export default class PlaceAddScreen extends Component<Props> {
+export default class PlaceAddScreen extends Component {
 
     static navigationOptions = ({ navigation }) => {
         return {

@@ -1,6 +1,6 @@
 import Db from './RealmSchemas'
 
-let TravelServices = {
+export default TravelServices = {
     insert: (travel) => {
         let res = Db.objects('Travel')
         if (Object.keys(res).length === 0){
@@ -17,9 +17,11 @@ let TravelServices = {
         return Object.keys(res).length !== 0 ? res[0] : null
     },
     selectAll: (user) => {
-        let res = Db.objects('Travel').filtered('user = $0', user)
-        return Object.keys(res).length !== 0 ? res : null
+        /*let res = Db.objects('Travel').filtered('user = $0', user)
+        return Object.keys(res).length !== 0 ? res : null*/
+        return Db.objects('Travel').filtered('user = $0', user)
+    },
+    delete: (travel) => {
+        Db.write(() => Db.delete(TravelServices.select(travel.id)))
     }
 }
-
-module.exports = TravelServices

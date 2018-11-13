@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {Text, View, StyleSheet} from 'react-native'
 
-type Props = {}
-export default class TextEmptyList extends Component<Props> {
+export default class TextEmptyList extends Component{
     render(){
         return this.props.visible ?
         (<Text style={styles.textEmptyList}>{this.props.text}</Text>):

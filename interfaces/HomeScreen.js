@@ -13,29 +13,26 @@ import Orientation from 'react-native-orientation'
 import IconSimple from 'react-native-vector-icons/SimpleLineIcons'
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Dropdown } from 'react-native-material-dropdown';
+import { Button} from 'react-native-elements'
 
 import Travel from '../components/Travel'
-
 import UserServices from '../database/UserServices'
-
-import { URL, WEATHER_KEY } from '../Constants'
-
+import { WEATHER_URL, WEATHER_KEY, PRIMARY_COLOR } from '../Constants'
 import Util from '../Utilities'
+import baseStyles from '../style/Base'
 
 
 
 const menuOptions = [{
-    value: 'Viagens',
+    value: 'Nova viagem',
 }, {
     value: 'Configurações',
 }]
 
-type Props = {};
-
 const dimensions = Dimensions.get('window');
 const imageHeight = Math.round(dimensions.width * 9 / 16);
 const imageWidth = dimensions.width;
-export default class HomeScreen extends Component<Props> {
+export default class HomeScreen extends Component {
 
     constructor(props) {
         super(props);
@@ -93,13 +90,19 @@ export default class HomeScreen extends Component<Props> {
                     keyExtractor={(item, index) => index.toString()}
                     style={{ flex: 1 }}
                 />
+                <Button
+                    title='VER TODAS'
+                    buttonStyle={baseStyles.btnPositive}
+                    containerStyle={baseStyles.containerBtn}
+                    onPress={() => this.props.navigation.navigate('TravelList')}
+                />
             </View>
         );
     }
 
     componentDidMount() {
         Orientation.lockToPortrait();
-        fetch(`${URL}?q=Londrina,br&appid=${WEATHER_KEY}`)
+        fetch(`${WEATHER_URL}?q=Londrina,br&appid=${WEATHER_KEY}`)
             .then(resp => {
                 if (!resp.ok)
                     throw new Error('Problema na requisição')
@@ -121,8 +124,8 @@ export default class HomeScreen extends Component<Props> {
 
     _menuSelected = (text) => {
         switch (text) {
-            case 'Viagens':
-                this.props.navigation.navigate('TravelList')
+            case 'Nova viagem':
+                this.props.navigation.navigate('Travel', { cmd: 0 })
                 break
             case 'Configurações':
                 break
@@ -144,7 +147,8 @@ export default class HomeScreen extends Component<Props> {
                         marginRight: 8,
                         marginTop: 28
                     }}
-                    renderBase={() => <IconMaterial.Button name="dots-vertical" size={30} backgroundColor='transparent' color='gray'/>}
+                    textColor={PRIMARY_COLOR}
+                    renderBase={() => <IconMaterial.Button name="dots-vertical" size={30} backgroundColor='transparent' color={PRIMARY_COLOR}/>}
                     onChangeText={(text) => navigation.getParam('onSelected')(text)}
                 />
             )

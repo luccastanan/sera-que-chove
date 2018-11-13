@@ -15,8 +15,7 @@ import UserServices from '../database/UserServices'
 import {PRIMARY_COLOR} from '../Constants'
 import baseStyles from '../style/Base'
 
-type Props = {};
-export default class LoginScreen extends Component<Props> {
+export default class LoginScreen extends Component {
 
     constructor(props){
         super(props)

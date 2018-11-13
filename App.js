@@ -13,7 +13,10 @@ import Forgot from './interfaces/ForgotScreen'
 import Travel from './interfaces/TravelScreen'
 import TravelList from './interfaces/TravelListScreen'
 import PlaceAdd from './interfaces/PlaceAddScreen'
+import RestaurantList from './interfaces/RestaurantListScreen'
 import {createStackNavigator} from 'react-navigation'
+
+import {PRIMARY_COLOR} from './Constants'
 
 export default createStackNavigator(
 	{
@@ -21,7 +24,11 @@ export default createStackNavigator(
 			screen: Home,
 			navigationOptions:{
 				title: 'Home',
-				headerLeft: null
+				headerLeft: null,
+				headerTintColor: PRIMARY_COLOR,
+				headerTitleStyle: {
+					color: PRIMARY_COLOR
+				}
 			}
 		},
 		Login:{
@@ -31,28 +38,60 @@ export default createStackNavigator(
 		Register: {
 			screen: Register,
 			navigationOptions: { 
-				title:'Cadastro'
+				title: 'Cadastro',
+				headerTintColor: PRIMARY_COLOR,
+				headerTitleStyle: {
+					color: PRIMARY_COLOR
+				}
 			}
 		},
 		Forgot: {
 			screen: Forgot,
 			navigationOptions: {
-				title: 'Esqueci minha senha'
+				title: 'Esqueci minha senha',
+				headerTintColor: PRIMARY_COLOR,
+				headerTitleStyle: {
+					color: PRIMARY_COLOR
+				}
 			}
 		},
 		Travel: {
-			screen: Travel
+			screen: Travel,
+			navigationOptions: {
+				headerTintColor: PRIMARY_COLOR,
+				headerTitleStyle: {
+					color: PRIMARY_COLOR
+				}
+			}
 		},
 		TravelList: {
 			screen: TravelList,
 			navigationOptions: {
-				title: 'Viagens'
+				title: 'Viagens',
+				headerTintColor: PRIMARY_COLOR,
+				headerTitleStyle: {
+					color: PRIMARY_COLOR
+				}
 			}
 		},
 		PlaceAdd: {
 			screen: PlaceAdd,
 			navigationOptions:{
-				title:'Local'
+				title: 'Local',
+				headerTintColor: PRIMARY_COLOR,
+				headerTitleStyle: {
+					color: PRIMARY_COLOR
+				}
+			}
+		},
+		RestaurantList: {
+			screen: RestaurantList,
+			navigationOptions: {
+				title: 'Restaurantes',
+				headerTintColor: PRIMARY_COLOR,
+				headerTitleStyle: {
+					color: PRIMARY_COLOR
+				}
 			}
 		}
 	}, {

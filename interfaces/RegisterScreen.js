@@ -35,18 +35,21 @@ export default class RegisterScreen extends Component<Props> {
         return <View style={styles.container}>
             <View style={styles.panelForm}>
                 <Input
+                    value={this.state.name}
                     leftIcon={{ type: 'material-icons', name: 'person', color: PRIMARY_COLOR }}
                     containerStyle={baseStyles.input}
                     placeholder='Seu nome'
                     onChangeText={(name) => this.setState({ name })}
                 />
                 <Input
+                    value={this.state.email}
                     leftIcon={{ type: 'material-icons', name: 'email', color: PRIMARY_COLOR }}
                     containerStyle={baseStyles.input}
                     placeholder='Seu e-mail'
                     onChangeText={(email) => this.setState({ email })}
                 />
                 <Input
+                    value={this.state.pass}
                     leftIcon={{ type: 'material-community-icons', name: 'lock', color: PRIMARY_COLOR }}
                     containerStyle={baseStyles.input}
                     placeholder='Sua senha'
@@ -54,12 +57,14 @@ export default class RegisterScreen extends Component<Props> {
                 />
 
                 <Input
+                    value={this.state.dateBirth}
                     leftIcon={{ type: 'material-icons', name: 'date-range', color: PRIMARY_COLOR }}
                     containerStyle={baseStyles.input}
                     placeholder='Sua data de nascimento'
                     onChangeText={(dateBirth) => this.setState({ dateBirth })}
                 />
                 <Input
+                    value={this.state.phone}
                     leftIcon={{ type: 'material-icons', name: 'phone-android', color: PRIMARY_COLOR }}
                     containerStyle={baseStyles.input}
                     placeholder='Seu celular'

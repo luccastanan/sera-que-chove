@@ -13,10 +13,9 @@ import UserServices from '../database/UserServices'
 
 import TextEmptyList from '../components/TextEmptyList'
 import baseStyles from '../style/Base'
-import { PRIMARY_COLOR } from '../Constants'
+import { PRIMARY_COLOR, FIND_PLACES_URL, GOOGLE_KEY } from '../Constants'
 
-type Props = {}
-export default class TravelScreen extends Component<Props> {
+export default class TravelScreen extends Component{
 
     static navigationOptions = ({ navigation }) => {
         return ({
@@ -30,10 +29,7 @@ export default class TravelScreen extends Component<Props> {
     constructor(props){
         super(props)
         this.state={
-            places: [{
-                address:'São Paulo/SP',
-                date:'11/10/2018'
-            }]
+            places: []
         }
     }
 
@@ -73,10 +69,13 @@ export default class TravelScreen extends Component<Props> {
         this.setState({places: cPlaces})
     }
 
-    _touchAddPlace = () => this.props.navigation.navigate('PlaceAdd', { handleAdd: (place) => this._handlerAdd(place) })
+    _touchAddPlace = () => this.props.navigation.navigate('PlaceAdd', { handleAdd: (place) => this._loadRestaurants(place) })
 
-    _handlerAdd = (place) => {
-        this.setState({
+    _loadRestaurants = (place) => {
+        place.restaurants = []
+        place.weather = null
+        place.notifications = []
+    /*this.setState({
             places: [...this.state.places,
                 {
                     ...place,
@@ -84,7 +83,37 @@ export default class TravelScreen extends Component<Props> {
                     weather: null,
                     notifications: []
                 }]
-            })
+            })*/
+        let location = {
+            lat: -23.2871973,
+            lon: -51.2039
+        }
+        fetch(`${FIND_PLACES_URL}&location=${location.lat},${location.lon}&key=${GOOGLE_KEY}`)
+        .then(resp => {
+            if (!resp.ok) 
+                throw new Error('Problema ao obter restaurantes próximo desse local')
+            return resp.json()
+        }).then(body => {
+            for(k in body.results){ 
+                let rest = body.results[k]
+                place.restaurants.push({
+                    title: rest.name,
+                    rating: Math.round(rest.rating * 10) / 10,
+                    address: rest.vicinity,
+                })
+            }
+            this._savePlace(place)
+        }).catch(error => {
+            console.log(error)
+            Alert.alert('Atenção', 'Problema ao obter restaurantes próximo desse local')
+            this._savePlace(place)
+        })
+    }
+
+    _savePlace = (place) => {
+        this.setState({
+            places: [...this.state.places, place]
+        })
     }
 
     _touchRegister = () => {
