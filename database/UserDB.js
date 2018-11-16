@@ -1,6 +1,6 @@
 import Db from './RealmSchemas'
 
-export default UserServices = {
+export default UserDB = {
     insert: (user) => {
         let res = Db.objects('User')
         if (Object.keys(res).length === 0){

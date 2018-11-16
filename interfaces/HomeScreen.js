@@ -16,10 +16,10 @@ import { Dropdown } from 'react-native-material-dropdown';
 import { Button} from 'react-native-elements'
 
 import Travel from '../components/Travel'
-import UserServices from '../database/UserServices'
-import { WEATHER_URL, WEATHER_KEY, PRIMARY_COLOR } from '../Constants'
-import Util from '../Utilities'
+import UserDB from '../database/UserDB'
+import { PRIMARY_COLOR } from '../Constants'
 import baseStyles from '../style/Base'
+import Services from '../services'
 
 
 
@@ -39,15 +39,15 @@ export default class HomeScreen extends Component {
         this.state = {
             openedMenu: false,
             closestTravel: [],
-            currentWeather: 24,
-            currentMax: 28,
-            currentMin: 22,
+            currentWeather: -100,
+            currentMax: -1,
+            currentMin: -1,
             tomorrowWeather: 16,
             tomorrowMax: 22,
             tomorrowMin: 14
         };
 
-        console.log(UserServices.selectCache())
+        console.log(UserDB.selectCache())
     }
 
     render() {
@@ -63,11 +63,13 @@ export default class HomeScreen extends Component {
                                 <Text style={[styles.weatherText, styles.h4]}>Londrina</Text>
                             </View>
                             <View style={styles.panelWeather}>
-                                <Text style={[styles.weatherText, styles.panelCurrent]}>{this.state.currentWeather}</Text>
-                                <View style={styles.panelMM}>
-                                    <Text style={styles.weatherText}>▲ {this.state.currentMax}º</Text>
-                                    <Text style={styles.weatherText}>▼ {this.state.currentMin}º</Text>
-                                </View>
+                                <Text style={[styles.weatherText, styles.panelCurrent]}>{this.state.currentWeather == -100 ? "---" : this.state.currentWeather}º</Text>
+                                {this.state.currentWeather !== -100 &&
+                                    <View style={styles.panelMM}>
+                                        <Text style={styles.weatherText}>▲ {this.state.currentMax}º</Text>
+                                        <Text style={styles.weatherText}>▼ {this.state.currentMin}º</Text>
+                                    </View>
+                                }
                             </View>
                         </View>
                         <View style={styles.panelBottom}>
@@ -102,19 +104,13 @@ export default class HomeScreen extends Component {
 
     componentDidMount() {
         Orientation.lockToPortrait();
-        fetch(`${WEATHER_URL}?q=Londrina,br&appid=${WEATHER_KEY}`)
-            .then(resp => {
-                if (!resp.ok)
-                    throw new Error('Problema na requisição')
-                return resp.json()
-            }).then(body => {
-                this.setState(
-                    {
-                        currentWeather: Util.kToC(body.main.temp),
-                        currentMax: Util.kToC(body.main.temp_max),
-                        currentMin: Util.kToC(body.main.temp_min)
-                    }
-                )
+        Services.forecast(-23.2871973, -51.2039,0)
+            .then(weather => {
+                this.setState({
+                    currentWeather: weather.current,
+                    currentMax: weather.max,
+                    currentMin: weather.min
+                })
             }).catch(error => {
                 console.log(error.toString())
             })

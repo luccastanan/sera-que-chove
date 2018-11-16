@@ -13,12 +13,11 @@ import { Button, Input } from 'react-native-elements'
 
 import Orientation from 'react-native-orientation'
 
-import UserServices from '../database/UserServices'
+import UserDB from '../database/UserDB'
 import baseStyles from '../style/Base'
 import {PRIMARY_COLOR} from '../Constants'
 
-type Props = {};
-export default class RegisterScreen extends Component<Props> {
+export default class RegisterScreen extends Component {
 
     constructor(props){
         super(props)
@@ -55,7 +54,6 @@ export default class RegisterScreen extends Component<Props> {
                     placeholder='Sua senha'
                     onChangeText={(pass) => this.setState({ pass })}
                 />
-
                 <Input
                     value={this.state.dateBirth}
                     leftIcon={{ type: 'material-icons', name: 'date-range', color: PRIMARY_COLOR }}
@@ -74,7 +72,8 @@ export default class RegisterScreen extends Component<Props> {
                     title='Cadastrar'
                     buttonStyle={baseStyles.btnPositive}
                     containerStyle={baseStyles.containerBtn}
-                    onPress={() => this._touchRegister()} />
+                    onPress={() => this._touchRegister()} 
+                />
             </View>
         </View>
     }
@@ -83,7 +82,7 @@ export default class RegisterScreen extends Component<Props> {
         if (this.state.name === '' || this.state.email === '' || this.state.pass === '' || this.state.dateBirth === '' || this.state.phone === ''){
             Alert.alert('Atenção','Todos os campos são obrigatórios')
         }else{
-            UserServices.insert(this.state)
+            UserDB.insert(this.state)
             this.props.navigation.goBack()
         }
     }

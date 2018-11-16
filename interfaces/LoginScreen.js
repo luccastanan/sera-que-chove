@@ -11,7 +11,7 @@ import {Platform, StyleSheet, Text, View, Alert} from 'react-native';
 import { Button, Input } from 'react-native-elements'
 import Orientation from 'react-native-orientation'
 
-import UserServices from '../database/UserServices'
+import UserDB from '../database/UserDB'
 import {PRIMARY_COLOR} from '../Constants'
 import baseStyles from '../style/Base'
 
@@ -59,9 +59,9 @@ export default class LoginScreen extends Component {
     }
 
     _touchLogin = () => {
-        let user = UserServices.auth(this.state.email, this.state.pass)
+        let user = UserDB.auth(this.state.email, this.state.pass)
         if (user) {
-            UserServices.insertCache(user)
+            UserDB.insertCache(user)
             this.props.navigation.navigate('Home')
         }else {
             Alert.alert('Atenção', 'Dados inválidos')

@@ -10,22 +10,25 @@ import IconMaterialCM from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import baseStyles from '../style/Base'
 import { PRIMARY_COLOR } from '../Constants'
+import Util from '../Utilities';
 
 export default class PlaceAddScreen extends Component {
 
-    static navigationOptions = ({ navigation }) => {
+    /*static navigationOptions = ({ navigation }) => {
         return {
             headerRight: (
                 <IconMaterialCM.Button name="check" size={30} backgroundColor='transparent' color={PRIMARY_COLOR} onPress={() => navigation.getParam('touchAdd')()} />
             )
         }
-    }
+    }*/
 
     constructor(props){
         super(props)
         this.state={
             address: '',
-            date: ''
+            latitude: '',
+            longitude: '', 
+            date: null
         }
     }
 
@@ -41,14 +44,24 @@ export default class PlaceAddScreen extends Component {
                 />
                 {this._datePicker()}
             </View>
+
+            <Button
+                title='Adicionar'
+                buttonStyle={baseStyles.btnPositive}
+                containerStyle={baseStyles.containerBtn}
+                onPress={() => this._touchAdd()}
+            />
         </View>
     }
 
     _findPlace = () => {
         RNGooglePlaces.openAutocompleteModal()
             .then((place) => {
-                console.log(place);
-                this.setState({address: place.address})
+                this.setState({
+                    address: place.address,
+                    latitude: place.latitude,
+                    longitude: place.longitude
+                })
             })
             .catch(error => console.log(error.message)); 
     }
@@ -58,7 +71,7 @@ export default class PlaceAddScreen extends Component {
             date={this.state.date}
             mode="date"
             placeholder="Data"
-            format="DD-MM-YYYY"
+            format="DD/MM/YYYY"
             minDate={new Date()}
             confirmBtnText="Ok"
             cancelBtnText="Cancelar"
@@ -67,7 +80,7 @@ export default class PlaceAddScreen extends Component {
                     position: 'absolute',
                     left: 0,
                     top: 4,
-                    marginLeft: 0
+                    marginLeft: 0 
                 },
                 dateInput: {
                     borderWidth:0,
@@ -75,13 +88,15 @@ export default class PlaceAddScreen extends Component {
                 }
             }}
             iconComponent={<IconMaterial name="date-range" size={30} color={PRIMARY_COLOR} />}
-            onDateChange={(date) => this.setState({ date: date })}
+            onDateChange={(date) => {
+                const dateS = date.split('/')
+                this.setState({ date: new Date(dateS[2], dateS[1]-1, dateS[0]) })
+            }}
         />
     }
 
     _touchAdd = () => {
-        //this.props.navigation.state.params.handleAdd({ address: this.state.address, date: this.state.date })
-        this.props.navigation.getParam('handleAdd')({address: this.state.address, date: this.state.date})
+        this.props.navigation.getParam('handleAdd')(this.state)
         this.props.navigation.goBack()
     }
 

@@ -9,13 +9,13 @@ export default class FullPlace extends Component{
         return <View style={styles.container}>
             <View style={styles.infoPanel}>
                 <Text style={styles.txAddress}>{this.props.place.address}</Text>
-                <Text style={styles.txDate}>{this.props.place.date}</Text>
+                <Text style={styles.txDate}>{this.props.place.date.toString()}</Text>
             </View>
             <View style={styles.weatherPanel}>
                 <Text style={styles.txCurrent}>{this.props.place.weather ? this.props.place.weather.current : '---'}</Text>
                 <View style={styles.mmPanel}>
                     <Text style={styles.txMM}>▲ {this.props.place.weather ? this.props.place.weather.max : '---'}</Text>
-                    <Text style={styles.txMM}>▼ {this.props.place.weather ? this.props.place.weather.max : '---'}</Text>
+                    <Text style={styles.txMM}>▼ {this.props.place.weather ? this.props.place.weather.mix : '---'}</Text>
                 </View>
             </View>
         </View>

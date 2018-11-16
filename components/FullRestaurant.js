@@ -12,49 +12,60 @@ export default class FullRestaurant extends Component{
     }
 
     render(){
-        return <View style={styles.container}>
+        return (<View style={styles.container}>
             <ImageBackground source={require('../img/restaurant.jpg')} 
                 resizeMethod='scale'
                 style={{height:130}}
-                borderRadius={5}>
+                borderTopLeftRadius={5}
+                borderTopRightRadius={5}>
                 <View style={styles.titlePanel}>
                     <Text style={styles.txTitle}>{this.props.rest.title}</Text>
                 </View>
             </ImageBackground>
             <View style={styles.infoPanel}>
-                <Text>{this.props.rest.address}</Text>
+                <Text style={styles.txAddress}>{this.props.rest.address}</Text>
                 <Rating 
-                    style={{height:15}}
+                    style={{marginBottom:-15}}
                     imageSize={20}
                     startingValue={this.props.rest.rating}
                     readonly
                 />
             </View>
-        </View>
+        </View>)
     }
 }
 
 const styles = StyleSheet.create({
     container:{
         margin:8,
-        borderRadius:5,
-        borderWidth:1,
-        borderColor:PRIMARY_COLOR
     },
     titlePanel:{
         backgroundColor:'#000000ab',
         position:'absolute',
         bottom:0,
-        padding:4,
-        width:'100%',
-        borderBottomStartRadius:5,
-        borderBottomEndRadius:5
+        paddingStart:8,
+        paddingTop:4,
+        paddingEnd:8,
+        paddingBottom:4,
+        width:'100%'
     },
     txTitle:{
         color:'white',
         fontSize:18
     },
     infoPanel:{
-        marginTop:8
+        paddingStart: 8,
+        paddingTop:     4,
+        paddingEnd: 8,
+        paddingBottom: 4,
+        borderBottomStartRadius: 5,
+        borderBottomEndRadius:  5,
+        borderBottomWidth: 1,
+        borderStartWidth: 1,
+        borderEndWidth: 1,
+        borderColor: PRIMARY_COLOR
+    },
+    txAddress:{
+        marginBottom:4
     }
 })

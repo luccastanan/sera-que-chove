@@ -1,7 +1,9 @@
 import Db from './RealmSchemas'
-import RestaurantServices from './RestaurantServices'
+import RestaurantDB from './RestaurantDB'
+import Services from '../services';
+import WeatherDB from './WeatherDB';
 
-export default PlaceServices = {
+export default PlaceDB = {
     insert: (place) => {
         let res = Db.objects('Place')
         if (Object.keys(res).length === 0){
@@ -9,11 +11,17 @@ export default PlaceServices = {
         }else{
             res = res.sorted('id', true)
             place.id = res[0].id + 1
+
         }
+        console.log('place', place)
 
         place.restaurants.forEach(restaurant => {
-            RestaurantServices.insert(restaurant)
+            RestaurantDB.insert(restaurant)
         });
+
+        if (place.weather) {
+            WeatherDB.insert(place.weather)
+        }
 
         Db.write(() => Db.create('Place', place, true))
     },

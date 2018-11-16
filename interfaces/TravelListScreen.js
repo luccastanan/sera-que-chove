@@ -17,8 +17,8 @@ import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
 import Travel from '../components/Travel'
 import TextEmptyList from '../components/TextEmptyList'
 
-import UserServices from '../database/UserServices'
-import TravelServices from '../database/TravelServices'
+import UserDB from '../database/UserDB'
+import TravelDB from '../database/TravelDB'
 
 import baseStyle from '../style/Base'
 import {PRIMARY_COLOR} from '../Constants'
@@ -37,7 +37,7 @@ export default class HomeScreen extends Component {
     constructor(props) {
         super(props)
 
-        let travelsCollection = TravelServices.selectAll(UserServices.selectCache())
+        let travelsCollection = TravelDB.selectAll(UserDB.selectCache())
         travelsCollection.addListener((travels, changes) => {
             changes.insertions.forEach(index => {
                 let travelI = travels[index]
@@ -99,7 +99,7 @@ export default class HomeScreen extends Component {
         Alert.alert('Atenção', 'Tem certeza que deseja apagar essa viagem?',
         [
             { text: 'Cancelar' },
-            { text: 'Sim', onPress: () => TravelServices.delete(travel)}
+            { text: 'Sim', onPress: () => TravelDB.delete(travel)}
         ])
     }
 

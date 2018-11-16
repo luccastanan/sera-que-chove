@@ -44,11 +44,13 @@ const PlaceSchema = {
     properties: {
         id: 'int',
         address: 'string',
-        /*date: 'date',*/
-        date: 'string',
+        date: 'date',
+        /*date: 'string',*/
         restaurants: (RESTAURANT_SCHEMA + '[]'),
         weather: (WEATHER_SCHEMA + '?'),
-        notifications: (NOTIFICATION_SCHEMA + '[]')
+        notifications: (NOTIFICATION_SCHEMA + '[]'),
+        latitude: 'float',
+        longitude: 'float'
     }
 }
 
@@ -57,7 +59,7 @@ const WeatherSchema = {
     primaryKey: 'id',
     properties: {
         id: 'int',
-        current: 'int',
+        current: 'int?',
         max: 'int',
         min: 'int'
     }

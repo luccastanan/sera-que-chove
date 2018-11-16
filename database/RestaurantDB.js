@@ -1,6 +1,6 @@
 import Db from './RealmSchemas'
 
-export default RestaurantServices = {
+export default RestaurantDB = {
     insert: (restaurant) => {
         let res = Db.objects('Restaurant')
         if (Object.keys(res).length === 0){

@@ -1,6 +1,6 @@
 import Db from './RealmSchemas'
 
-export default TravelServices = {
+export default TravelDB = {
     insert: (travel) => {
         let res = Db.objects('Travel')
         if (Object.keys(res).length === 0){

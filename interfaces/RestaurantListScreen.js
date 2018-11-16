@@ -10,26 +10,11 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, FlatList, TouchableOpacity, Alert } from 'react-native';
 
 import Orientation from 'react-native-orientation'
-import { Button } from 'react-native-elements'
-import Swipeout from 'react-native-swipeout' 
-import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
-
-import Travel from '../components/Travel'
-import TextEmptyList from '../components/TextEmptyList'
 import FullRestaurant from '../components/FullRestaurant'
 
-import UserServices from '../database/UserServices'
-import TravelServices from '../database/TravelServices'
-
 import baseStyle from '../style/Base'
-import {PRIMARY_COLOR} from '../Constants'  
 
 export default class RestaurantListScreen extends Component {
-
-    constructor(props){
-        super(props)
-        console.log(props)
-    }
 
     render() {
         return (
