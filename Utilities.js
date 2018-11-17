@@ -16,5 +16,8 @@ export default Utilities = {
         for (let index = 0; index < array.length; index++) {
             await callback(array[index], index, array);
         }
+    },
+    dateFormat: (date) => {
+        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear().toString().slice(-2)}` 
     }
 }

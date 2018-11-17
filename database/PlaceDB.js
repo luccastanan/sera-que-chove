@@ -13,7 +13,6 @@ export default PlaceDB = {
             place.id = res[0].id + 1
 
         }
-        console.log('place', place)
 
         place.restaurants.forEach(restaurant => {
             RestaurantDB.insert(restaurant)

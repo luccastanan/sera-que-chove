@@ -7,13 +7,14 @@
  */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, FlatList, ImageBackground, Dimensions } from 'react-native';
+import { Platform, StyleSheet, Text, View, FlatList, ImageBackground, Dimensions, PermissionsAndroid } from 'react-native';
 
 import Orientation from 'react-native-orientation'
 import IconSimple from 'react-native-vector-icons/SimpleLineIcons'
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Dropdown } from 'react-native-material-dropdown';
 import { Button} from 'react-native-elements'
+import RNGooglePlaces from 'react-native-google-places'
 
 import Travel from '../components/Travel'
 import UserDB from '../database/UserDB'
@@ -104,18 +105,46 @@ export default class HomeScreen extends Component {
 
     componentDidMount() {
         Orientation.lockToPortrait();
-        Services.forecast(-23.2871973, -51.2039,0)
-            .then(weather => {
-                this.setState({
-                    currentWeather: weather.current,
-                    currentMax: weather.max,
-                    currentMin: weather.min
-                })
-            }).catch(error => {
-                console.log(error.toString())
-            })
-
         this.props.navigation.setParams({onSelected: (text) =>this._menuSelected(text)})
+        this._requestCameraPermission()
+    }
+
+    _requestCameraPermission = async () =>{
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                    'title': 'Permissão para localização',
+                    'message': 'É necessário a permissão para obter ' +
+                        'a localização atual.'
+                }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                this._refreshCurrentLocation()
+            } else {
+                console.log("Permissão de localização negada")
+            }
+        } catch (err) {
+            console.warn(err)
+        }
+    }
+
+    _refreshCurrentLocation = () => {
+        navigator.geolocation.getCurrentPosition(data => {
+            Services.forecast(data.coords.latitude, data.coords.longitude, 0)
+                .then(weather => {
+                    this.setState({
+                        currentWeather: weather.current,
+                        currentMax: weather.max,
+                        currentMin: weather.min
+                    })
+                }).catch(error => {
+                    console.log(error.toString())
+                })
+        },
+        error => {
+            console.log(e)
+        })
     }
 
     _menuSelected = (text) => {

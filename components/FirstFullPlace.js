@@ -12,13 +12,13 @@ export default class FirstFullPlace extends Component{
             <View style={styles.content}>
                 <View style={styles.infoPanel}>
                     <Text style={styles.txAddress}>{this.props.place.address}</Text>
-                    <Text style={styles.txDate}>{this.props.place.date.toString()}</Text>
+                    <Text style={styles.txDate}>{Util.dateFormat(this.props.place.date)}</Text>
                 </View>
                 <View style={styles.weatherPanel}>
                     <Text style={styles.txCurrent}>{this.props.place.weather ? this.props.place.weather.current : '---'}</Text>
                     <View style={styles.mmPanel}>
                         <Text style={styles.txMM}>▲ {this.props.place.weather ? this.props.place.weather.max : '---'}</Text>
-                        <Text style={styles.txMM}>▼ {this.props.place.weather ? this.props.place.weather.mix : '---'}</Text>
+                        <Text style={styles.txMM}>▼ {this.props.place.weather ? this.props.place.weather.min : '---'}</Text>
                     </View>
                 </View>
             </View>

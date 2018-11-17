@@ -10,9 +10,7 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, FlatList, TouchableOpacity, Alert } from 'react-native';
 
 import Orientation from 'react-native-orientation'
-import { Button } from 'react-native-elements'
 import Swipeout from 'react-native-swipeout' 
-import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import Travel from '../components/Travel'
 import TextEmptyList from '../components/TextEmptyList'
@@ -70,7 +68,7 @@ export default class HomeScreen extends Component {
         this.state = {
             travelList: travels,
             openedMenu: false
-        };
+        }
     }
 
     render() {

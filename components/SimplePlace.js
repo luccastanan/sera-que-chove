@@ -3,6 +3,7 @@ import {View, Text, StyleSheet} from 'react-native'
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { PRIMARY_COLOR } from '../Constants'
+import Util from '../Utilities';
 
 export default class SimplePlace extends Component{
 
@@ -17,7 +18,7 @@ export default class SimplePlace extends Component{
                     <IconMaterial.Button name="close" style={{margin:0, padding:0}} size={24} backgroundColor='transparent' color={PRIMARY_COLOR} onPress={() => this.props.delete()}/>
                 </View>
                 <View style={styles.panelDate}>
-                    <Text style={styles.date}>{this.props.place.date.toString()}</Text>
+                    <Text style={styles.date}>{Util.dateFormat(this.props.place.date)}</Text>
                 </View>
             </View>
     }
