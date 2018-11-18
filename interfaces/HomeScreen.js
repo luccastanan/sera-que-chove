@@ -43,7 +43,6 @@ export default class HomeScreen extends Component {
             currentWeather: -100,
             currentMax: -1,
             currentMin: -1,
-            tomorrowWeather: 16,
             tomorrowMax: 22,
             tomorrowMin: 14
         };
@@ -60,8 +59,24 @@ export default class HomeScreen extends Component {
                         style={{ height: imageHeight, width: imageWidth }}>
                         {/*<View style={{ backgroundColor: '#00000059', flex: 1 }} />*/}
                         <View style={styles.panelContent}>
-                            <View style={styles.panelHeader}>
-                                <Text style={[styles.weatherText, styles.h4]}>Londrina</Text>
+                            <View style={[styles.panelHeader,{position:'absolute'}]}>
+                                <Text style={[styles.weatherText, styles.h4, {marginTop:8}]}>Londrina</Text>
+                                <Dropdown data={menuOptions}
+                                    rippleInsets={{ top: 4, bottom: 0, left: 0, right: 8 }}
+                                    containerStyle={{ width: 50, height: 50 }}
+                                    dropdownPosition={1}
+                                    itemColor="rgba(0, 0, 0, .87)"
+                                    pickerStyle={{
+                                        width: 136,
+                                        left: null,
+                                        right: 0,
+                                        marginRight: 8,
+                                        marginTop: 28
+                                    }}
+                                    textColor={PRIMARY_COLOR}
+                                    renderBase={() => <IconMaterial.Button name="dots-vertical" size={30} backgroundColor='transparent' color={'white'} />}
+                                    onChangeText={(text) => navigation.getParam('onSelected')(text)}
+                                />
                             </View>
                             <View style={styles.panelWeather}>
                                 <Text style={[styles.weatherText, styles.panelCurrent]}>{this.state.currentWeather == -100 ? "---" : this.state.currentWeather}º</Text>
@@ -75,14 +90,11 @@ export default class HomeScreen extends Component {
                         </View>
                         <View style={styles.panelBottom}>
                             <View style={styles.panelBottomDesc}>
-                                <Text style={[styles.weatherText, styles.h4]}>Amanhã</Text>
+                                <Text style={[styles.weatherText, styles.h5]}>Amanhã</Text>
                             </View>
-                            <View style={styles.panelBottomWeather}>
-                                <Text style={[styles.weatherText, {fontSize:24, fontWeight:'bold', marginEnd:8}]}>{this.state.tomorrowWeather}</Text>
-                                <View style={styles.panelBottomMM}>
-                                    <Text style={styles.weatherText}>▲ {this.state.tomorrowMax}º</Text>
-                                    <Text style={styles.weatherText}>▼ {this.state.tomorrowMin}º</Text>
-                                </View>
+                            <View style={styles.panelBottomMM}>
+                                <Text style={styles.weatherText}>▲ {this.state.tomorrowMax}º</Text>
+                                <Text style={styles.weatherText}>▼ {this.state.tomorrowMin}º</Text>
                             </View>
                         </View>                
                     </ImageBackground >
@@ -141,6 +153,17 @@ export default class HomeScreen extends Component {
                 }).catch(error => {
                     console.log(error.toString())
                 })
+
+            Services.forecast(data.coords.latitude, data.coords.longitude, 1)
+                .then(weather => {
+                    this.setState({
+                        tomorrowWeather: weather.current,
+                        tomorrowMax: weather.max,
+                        tomorrowMin: weather.min
+                    })
+                }).catch(error => {
+                    console.log(error.toString())
+                })
         },
         error => {
             console.log(e)
@@ -156,29 +179,6 @@ export default class HomeScreen extends Component {
                 break
         }
     }
-
-    static navigationOptions = ({navigation}) => {
-        return {
-            headerRight: (
-                <Dropdown data={menuOptions}
-                    rippleInsets={{ top: 4, bottom: 0, left: 0, right: 8 }}
-                    containerStyle={{ width: 50, height: 50 }}
-                    dropdownPosition={1}
-                    itemColor="rgba(0, 0, 0, .87)"
-                    pickerStyle={{
-                        width: 136,
-                        left: null,
-                        right: 0,
-                        marginRight: 8,
-                        marginTop: 28
-                    }}
-                    textColor={PRIMARY_COLOR}
-                    renderBase={() => <IconMaterial.Button name="dots-vertical" size={30} backgroundColor='transparent' color={PRIMARY_COLOR}/>}
-                    onChangeText={(text) => navigation.getParam('onSelected')(text)}
-                />
-            )
-        }
-    }
 }
 
 const styles = StyleSheet.create({
@@ -192,11 +192,13 @@ const styles = StyleSheet.create({
     },
     panelContent: {
         flex: 1,
-        padding:8
     },
     panelHeader: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        width:'100%',
+        paddingStart:12,
+        paddingTop:6
     },
     panelWeather: {
         flex: 1,
@@ -213,30 +215,28 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     panelBottom: {
-        height: 45,
+        height: 40,
         backgroundColor: '#3498DB',
         flexDirection: 'row',
         alignItems:'center',
-        paddingStart:8,
+        paddingStart:10,
         paddingTop:4,
-        paddingEnd:8,
+        paddingEnd:10,
         paddingBottom:4
     },
     panelBottomDesc: {
         flex: 1
     },
-    panelBottomWeather: {
-        flexDirection: 'row',
-        alignItems: 'center',
-
-    },
     panelBottomMM: {
-        flexDirection: 'column'
+        flexDirection: 'row'
     },
     weatherText:{
         color:'white'
     },
     h4:{
         fontSize:20
+    },
+    h5:{
+        fontSize:18
     }
 });

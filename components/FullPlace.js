@@ -35,7 +35,9 @@ const styles = StyleSheet.create({
         borderColor: PRIMARY_COLOR,
         borderRadius:5,
         padding:8,
-        marginBottom:8
+        marginStart: 8,
+        marginBottom:8,
+        marginEnd:8
     },
     infoPanel:{
         flex:1

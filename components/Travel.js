@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { Platform, StyleSheet, Text, View, FlatList, Button, TouchableOpacity } from 'react-native'
-import {Card} from 'react-native-elements'
+import { Card } from 'react-native-material-ui'
 
 import FullPlace from './FullPlace'
 import FirstFullPlace from './FirstFullPlace'
-import { PRIMARY_COLOR } from '../Constants';
 import Util from '../Utilities'
 
 export default class Travel extends Component {
@@ -14,25 +13,25 @@ export default class Travel extends Component {
 	}
 
 	render(){
-		return <View style={styles.container}>
-			<FlatList 
-				data={Util.mapToList(this.props.travel.places)}
-				renderItem={({ item, index }) => index == 0 ? <FirstFullPlace place={item} onSeeMore={() => this.props.onSeeMore(item)} /> : <FullPlace place={item} />}
-				keyExtractor={(item, index) => index.toString()}
-				style={{ flex: 1 }}
-			/>
-		</View>
+		return <Card style={styles.container}>
+			<View style={styles.padd}>
+				<FlatList 
+					data={Util.mapToList(this.props.travel.places)}
+					renderItem={({ item, index }) => index == 0 ? <FirstFullPlace place={item} onSeeMore={() => this.props.onSeeMore(item)} /> : <FullPlace place={item} />}
+					keyExtractor={(item, index) => index.toString()}
+					style={{ flex: 1 }}
+				/>
+			</View>
+		</Card>
 	}
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex:1,
-		margin:8,
-		borderWidth:0.5,
-		borderColor:PRIMARY_COLOR,
-		borderRadius:5,
-		padding:8,
-		backgroundColor:'#ecf0f1'
+		margin:8
+	},
+	padd:{
+		
 	}
 })

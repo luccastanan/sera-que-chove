@@ -18,7 +18,7 @@ import baseStyles from '../style/Base'
 import {PRIMARY_COLOR} from '../Constants'
 import InputDate from '../components/InputDate';
 
-export default class RegisterScreen extends Component {
+export default class AccountScreen extends Component {
 
     constructor(props){
         super(props)
@@ -78,8 +78,8 @@ export default class RegisterScreen extends Component {
     }
 
     _touchRegister = () => {
-        if (this.state.name === '' || this.state.email === '' || this.state.pass === '' || this.state.dateBirth === '' || this.state.phone === ''){
-            Alert.alert('Atenção','Todos os campos são obrigatórios')
+        if (this.state.name === '' || this.state.email === '' || this.state.pass === '' || this.state.dateBirth === '' || this.state.phone === '') {
+            Alert.alert('Dados faltandos', 'Todos os campos são obrigatórios')
         }else{
             UserDB.insert(this.state)
             this.props.navigation.goBack()

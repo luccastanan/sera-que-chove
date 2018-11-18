@@ -20,8 +20,8 @@ export default class LoginScreen extends Component {
     constructor(props){
         super(props)
         this.state={
-            email:'l@g.com',
-            pass:'123'
+            email:'',
+            pass:''
         }
     }
 
@@ -36,11 +36,12 @@ export default class LoginScreen extends Component {
                     onChangeText={(email) => this.setState({ email })}
                 />
                 <Input
-                    value={this.state.pass}
+                    value={new Array(this.state.pass.length + 1).join('*')}
                     leftIcon={{ type: 'material-community-icons', name: 'lock', color: PRIMARY_COLOR }}
                     containerStyle={baseStyles.input}
                     placeholder='Seu senha'
                     onChangeText={(pass) => this.setState({pass})}
+                    shake
                 />
                 <Button
                     title='Entrar'
@@ -59,12 +60,16 @@ export default class LoginScreen extends Component {
     }
 
     _touchLogin = () => {
-        let user = UserDB.auth(this.state.email, this.state.pass)
-        if (user) {
-            UserDB.insertCache(user)
-            this.props.navigation.navigate('Home')
-        }else {
-            Alert.alert('Atenção', 'Dados inválidos')
+        if (this.state.email == '' || this.state.pass=='') {
+            Alert.alert('Dados faltandos', 'Todos os campos são obrigatórios')
+        }else{
+            let user = UserDB.auth(this.state.email, this.state.pass)
+            if (user) {
+                UserDB.insertCache(user)
+                this.props.navigation.navigate('Home')
+            }else {
+                Alert.alert('Atenção', 'Dados inválidos')
+            }
         }
     }
 
@@ -78,6 +83,11 @@ export default class LoginScreen extends Component {
 
     componentDidMount() {
         Orientation.lockToPortrait();
+        let user = UserDB.selectCache()
+        if (user) {
+            console.log(user)
+            this.setState({ email: user.email, pass: user.pass }, () => this._touchLogin())
+        }
     }
 }
 

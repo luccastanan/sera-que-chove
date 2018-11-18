@@ -40,8 +40,12 @@ export default UserDB = {
         })
     },
     selectCache: () => {
-        let userId = Db.objects('CacheUser')[0].idUser
-        return Db.objects('User').filtered('id = $0', userId)[0]
+        let userCache = Db.objects('CacheUser')
+        if(userCache.length > 0){
+            let userId = userCache[0].idUser
+            return Db.objects('User').filtered('id = $0', userId)[0]
+        }
+        return null
     }  
 }
 
