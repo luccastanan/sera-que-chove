@@ -24,5 +24,6 @@ export default StyleSheet.create({
         borderColor: PRIMARY_COLOR,
         borderRadius: 30,
         marginBottom: 10*/
+        marginBottom:8
     }
 })

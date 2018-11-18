@@ -15,8 +15,7 @@ const UserSchema = {
         name: 'string',
         email: 'string',
         pass: 'string',
-        /*date_birth: 'date',*/
-        dateBirth: 'string',
+        dateBirth: 'date',
         phone: 'string'
     }
 }
@@ -45,7 +44,6 @@ const PlaceSchema = {
         id: 'int',
         address: 'string',
         date: 'date',
-        /*date: 'string',*/
         restaurants: (RESTAURANT_SCHEMA + '[]'),
         weather: (WEATHER_SCHEMA + '?'),
         notifications: (NOTIFICATION_SCHEMA + '[]'),

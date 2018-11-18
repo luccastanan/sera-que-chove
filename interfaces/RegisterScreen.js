@@ -16,6 +16,7 @@ import Orientation from 'react-native-orientation'
 import UserDB from '../database/UserDB'
 import baseStyles from '../style/Base'
 import {PRIMARY_COLOR} from '../Constants'
+import InputDate from '../components/InputDate';
 
 export default class RegisterScreen extends Component {
 
@@ -54,12 +55,10 @@ export default class RegisterScreen extends Component {
                     placeholder='Sua senha'
                     onChangeText={(pass) => this.setState({ pass })}
                 />
-                <Input
-                    value={this.state.dateBirth}
-                    leftIcon={{ type: 'material-icons', name: 'date-range', color: PRIMARY_COLOR }}
-                    containerStyle={baseStyles.input}
+                <InputDate
                     placeholder='Sua data de nascimento'
-                    onChangeText={(dateBirth) => this.setState({ dateBirth })}
+                    onSelected={(dateBirth) => this.setState({ dateBirth })}
+                    maximumDate={new Date()}
                 />
                 <Input
                     value={this.state.phone}

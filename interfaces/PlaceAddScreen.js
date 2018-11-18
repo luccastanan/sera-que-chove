@@ -11,6 +11,7 @@ import IconMaterialCM from 'react-native-vector-icons/MaterialCommunityIcons'
 import baseStyles from '../style/Base'
 import { PRIMARY_COLOR } from '../Constants'
 import Util from '../Utilities';
+import InputDate from '../components/InputDate';
 
 export default class PlaceAddScreen extends Component {
 
@@ -42,7 +43,11 @@ export default class PlaceAddScreen extends Component {
                     placeholder='Endereço de destino'
                     onFocus={() => this._findPlace()}
                 />
-                {this._datePicker()}
+                <InputDate
+                    placeholder='Data'
+                    minimumDate={new Date()}
+                    onSelected={(date) => this.setState({ date })}
+                />
             </View>
 
             <Button
@@ -66,35 +71,6 @@ export default class PlaceAddScreen extends Component {
             .catch(error => console.log(error.message)); 
     }
 
-    _datePicker = () => {
-        return <DatePicker
-            date={this.state.date}
-            mode="date"
-            placeholder="Data"
-            format="DD/MM/YYYY"
-            minDate={new Date()}
-            confirmBtnText="Ok"
-            cancelBtnText="Cancelar"
-            customStyles={{
-                dateIcon: {
-                    position: 'absolute',
-                    left: 0,
-                    top: 4,
-                    marginLeft: 0 
-                },
-                dateInput: {
-                    borderWidth:0,
-                    borderBottomWidth:1,
-                }
-            }}
-            iconComponent={<IconMaterial name="date-range" size={30} color={PRIMARY_COLOR} />}
-            onDateChange={(date) => {
-                const dateS = date.split('/')
-                this.setState({ date: new Date(dateS[2], dateS[1]-1, dateS[0]) })
-            }}
-        />
-    }
-
     _touchAdd = () => {
         this.props.navigation.getParam('handleAdd')(this.state)
         this.props.navigation.goBack()
@@ -112,10 +88,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent:'center'
     },
-    panel:{
-        flex:1,
-        alignItems:'center',
-        justifyContent:'center'
+    panel: {
+        flex: 1,
+        width: 300,
+        alignSelf: 'center',
+        justifyContent: 'center'
     },
     buttons:{
         flexDirection:'row'
