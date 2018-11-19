@@ -8,7 +8,7 @@
 
 import Home from './interfaces/HomeScreen'
 import Login from './interfaces/LoginScreen'
-import Register from './interfaces/AccountScreen'
+import Account from './interfaces/AccountScreen'
 import Forgot from './interfaces/ForgotScreen'
 import Travel from './interfaces/TravelScreen'
 import TravelList from './interfaces/TravelListScreen'
@@ -22,14 +22,22 @@ export default createStackNavigator(
 	{
 		Home : {
 			screen: Home,
-			navigationOptions: { header: null }
+			navigationOptions:{header:null}
+			/*navigationOptions:{
+				title: 'Home',
+				headerLeft: null,
+				headerTintColor: PRIMARY_COLOR,
+				headerTitleStyle: {
+					color: PRIMARY_COLOR
+				}
+			}*/
 		},
 		Login:{
             screen: Login,
             navigationOptions:{header:null}
 		},
-		Register: {
-			screen: Register,
+		Account: {
+			screen: Account,
 			navigationOptions: { 
 				title: 'Cadastro',
 				headerTintColor: PRIMARY_COLOR,

@@ -36,7 +36,8 @@ export default class LoginScreen extends Component {
                     onChangeText={(email) => this.setState({ email })}
                 />
                 <Input
-                    value={new Array(this.state.pass.length + 1).join('*')}
+                    /*value={new Array(this.state.pass.length + 1).join('*')}*/
+                    value={this.state.pass}
                     leftIcon={{ type: 'material-community-icons', name: 'lock', color: PRIMARY_COLOR }}
                     containerStyle={baseStyles.input}
                     placeholder='Seu senha'
@@ -68,13 +69,14 @@ export default class LoginScreen extends Component {
                 UserDB.insertCache(user)
                 this.props.navigation.navigate('Home')
             }else {
+                console.log(this.state)
                 Alert.alert('Atenção', 'Dados inválidos')
             }
         }
     }
 
     _touchRegister = () => {
-        this.props.navigation.navigate('Register')
+        this.props.navigation.navigate('Account', {cmd:0})
     }
 
     _touchForgot = () => {

@@ -21,9 +21,7 @@ export default class RestaurantListScreen extends Component {
             <View style={baseStyle.container}>
                 <FlatList
                     data={this.props.navigation.getParam('restaurants', null)}
-                    renderItem={({ item }) => 
-                        <FullRestaurant rest={item} />
-                    }
+                    renderItem={({ item }) => <FullRestaurant rest={item} /> }
                     keyExtractor={(item, index) => index.toString()}
                     style={{ flex: 1 }}
                 />

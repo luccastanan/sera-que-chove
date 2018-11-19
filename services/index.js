@@ -9,11 +9,11 @@ export default Services = {
                     if (!resp.ok)
                         throw new Error('Problema ao carregar previsão do tempo')
                     body = await resp.json()
-                    console.log(body)
                     return {
                         current: Util.kToC(body.main.temp),
                         max: Util.kToC(body.main.temp_max),
-                        min: Util.kToC(body.main.temp_min)
+                        min: Util.kToC(body.main.temp_min),
+                        city: body.name
                     }
                 })
         }else if(days <= 5) {

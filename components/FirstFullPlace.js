@@ -11,8 +11,9 @@ export default class FirstFullPlace extends Component{
         return <View style={styles.container}>
             <View style={styles.content}>
                 <View style={styles.infoPanel}>
+                    <Text style={styles.txName}>{this.props.place.name}</Text>
                     <Text style={styles.txAddress}>{this.props.place.address}</Text>
-                    <Text style={styles.txDate}>{Util.dateFormat(this.props.place.date)}</Text>
+                    <Text style={styles.txDate}>{Util.dateFormat(this.props.place.date, 1)}</Text>
                 </View>
                 <View style={styles.weatherPanel}>
                     <Text style={styles.txCurrent}>{this.props.place.weather ? this.props.place.weather.current : '---'}</Text>
@@ -59,10 +60,14 @@ const styles = StyleSheet.create({
     weatherPanel:{
 
     },
-    txAddress:{
+    txName:{
         fontWeight:'bold',
         fontSize:18,
         color:PRIMARY_COLOR
+    },
+    txAddress: {
+        fontSize: 14,
+        color: PRIMARY_COLOR
     },
     txDate:{
         fontSize:14,

@@ -37,10 +37,6 @@ export default class HomeScreen extends Component {
 
         let travelsCollection = TravelDB.selectAll(UserDB.selectCache())
         travelsCollection.addListener((travels, changes) => {
-            changes.insertions.forEach(index => {
-                let travelI = travels[index]
-                this.setState({ travelList: [...this.state.travelList, travelI]})
-            })
             changes.modifications.forEach(index => {
                 let travelM = travels[index]
                 let cTravelList = this.state.travelList
@@ -59,7 +55,7 @@ export default class HomeScreen extends Component {
 
             changes.deletions.forEach(index => {
                 let cTravelList = this.state.travelList
-                cTravelList.splice(index,1)
+                cTravelList.splice(index, 1)
                 this.setState({ travelList: cTravelList })
             })
         })
@@ -77,7 +73,7 @@ export default class HomeScreen extends Component {
                 <FlatList
                     data={this.state.travelList}
                     renderItem={({ item }) => 
-                        <Swipeout autoClose backgroundColor='white' right={[{text:'Alterar', type:'primary'}, {text:'Excluir', type:'delete', onPress: () => this._delete(item)}]}>
+                        <Swipeout autoClose backgroundColor='white' right={[{text:'Alterar', type:'primary', onPress: () => this._alter(item)}, {text:'Excluir', type:'delete', onPress: () => this._delete(item)}]}>
                             <Travel travel={item} onSeeMore={(place) => this._touchSeeMoreRestaurants(Util.mapToList(place.restaurants))} />
                         </Swipeout>
                     }
@@ -101,57 +97,19 @@ export default class HomeScreen extends Component {
         ])
     }
 
+    _alter = (travel) => {
+        this.props.navigation.navigate('Travel', {cmd:1, travel})
+    }
+
     _touchAllTravels = () => {
         this.props.navigation.navigate('Login')
     }
 
     _touchSeeMoreRestaurants = (restaurants) => {
-        this.props.navigation.navigate('RestaurantList', { restaurants})
+        this.props.navigation.navigate('RestaurantList', { restaurants })
     }
 
     componentDidMount() {
         Orientation.lockToPortrait();
     }
 }
-
-const styles = StyleSheet.create({
-    panel: {
-        height: 200,
-        backgroundColor: 'gray'
-    },
-    panelContent: {
-        flex: 1
-    },
-    panelHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    panelWeather: {
-        flex: 1,
-        alignSelf: 'center',
-        alignContent: 'center',
-        justifyContent: 'center'
-    },
-    panelCurrent: {
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 32
-    },
-    panelMM: {
-        flexDirection: 'row'
-    },
-    panelBottom: {
-        height: 40,
-        backgroundColor: '#3498DB',
-        flexDirection: 'row'
-    },
-    panelBottomDesc: {
-        flex: 1
-    },
-    panelBottomWeather: {
-        flexDirection: 'row'
-    },
-    panelBottomMM: {
-        flexDirection: 'column'
-    }
-});

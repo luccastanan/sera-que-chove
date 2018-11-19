@@ -22,6 +22,17 @@ export default TravelDB = {
         return Db.objects('Travel').filtered('user = $0', user)
     },
     delete: (travel) => {
-        Db.write(() => Db.delete(TravelServices.select(travel.id)))
+        Db.write(() => Db.delete(TravelDB.select(travel.id)))
+    },
+    update: (travel) => {
+        Db.write(() => {
+            let uTravel = Db.objectForPrimaryKey('Travel', travel.id)
+            uTravel.places = travel.places
+            uTravel.startDate = travel.startDate
+            uTravel.endDate = travel.endDate
+        })
+    },
+    selectTravelInProgressAndFuture: (user) => {
+        return Db.objects('Travel').filtered('user = $0 AND endDate > $1', user, new Date())
     }
 }

@@ -11,7 +11,6 @@ export default PlaceDB = {
         }else{
             res = res.sorted('id', true)
             place.id = res[0].id + 1
-
         }
 
         place.restaurants.forEach(restaurant => {

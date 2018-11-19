@@ -14,11 +14,14 @@ export default class SimplePlace extends Component{
     render(){
         return <View style={styles.container}>
                 <View style={styles.panelAddress}>
-                    <Text style={styles.address}>{this.props.place.address}</Text>
+                    <View style={styles.data}>
+                        <Text style={styles.name}>{this.props.place.name}</Text>
+                        <Text style={styles.address}>{this.props.place.address}</Text>
+                    </View>
                     <IconMaterial.Button name="close" style={{margin:0, padding:0}} size={24} backgroundColor='transparent' color={PRIMARY_COLOR} onPress={() => this.props.delete()}/>
                 </View>
                 <View style={styles.panelDate}>
-                    <Text style={styles.date}>{Util.dateFormat(this.props.place.date)}</Text>
+                    <Text style={styles.date}>{Util.dateFormat(this.props.place.date, 1)}</Text>
                 </View>
             </View>
     }
@@ -37,11 +40,17 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         alignItems:'center'
     },
-    address:{
+    data:{
+        flex: 1,
+        margin: 8
+    },
+    name:{
         color:PRIMARY_COLOR,
-        margin: 8,
-        fontSize:16,
-        flex:1
+        fontSize:18
+    },
+    address: {
+        color: PRIMARY_COLOR,
+        fontSize: 14
     },
     panelDate: {
         alignItems:'center',

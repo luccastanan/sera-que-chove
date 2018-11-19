@@ -17,7 +17,15 @@ export default Utilities = {
             await callback(array[index], index, array);
         }
     },
-    dateFormat: (date) => {
-        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear().toString().slice(-2)}` 
+    dateFormat: (date, mode) => {
+        let res = `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear().toString().slice(-2)}` 
+        if (mode == 1) 
+            res += `  ${date.getHours()}:${date.getMinutes()}`
+        return res 
+    },
+    stringFormat: (str, count, sym) => {
+        while (str.length < count) 
+            str = sym + str
+        return sym
     }
 }

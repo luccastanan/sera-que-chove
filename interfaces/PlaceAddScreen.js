@@ -47,6 +47,7 @@ export default class PlaceAddScreen extends Component {
                     placeholder='Data'
                     minimumDate={new Date()}
                     onSelected={(date) => this.setState({ date })}
+                    mode='datetime'
                 />
             </View>
 
@@ -62,7 +63,9 @@ export default class PlaceAddScreen extends Component {
     _findPlace = () => {
         RNGooglePlaces.openAutocompleteModal()
             .then((place) => {
+                console.log(place)
                 this.setState({
+                    name:place.name,
                     address: place.address,
                     latitude: place.latitude,
                     longitude: place.longitude
@@ -72,8 +75,8 @@ export default class PlaceAddScreen extends Component {
     }
 
     _touchAdd = () => {
-        this.props.navigation.getParam('handleAdd')(this.state)
         this.props.navigation.goBack()
+        this.props.navigation.getParam('handleAdd')(this.state)
     }
 
     componentWillMount() {

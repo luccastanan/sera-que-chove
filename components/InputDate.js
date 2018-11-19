@@ -21,7 +21,7 @@ export default class InputDate extends Component {
     _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
 
     _handleDatePicked = (date) => {
-        this.setState({date: Util.dateFormat(date)})
+        this.setState({date: Util.dateFormat(date, this.props.mode == 'date' ? 0 : 1)})
         this.props.onSelected(date)
         this._hideDateTimePicker();
     };
@@ -42,6 +42,7 @@ export default class InputDate extends Component {
                     onCancel={this._hideDateTimePicker}
                     minimumDate={this.props.minimumDate}
                     maximumDate={this.props.maximumDate}
+                    mode={this.props.mode}
                 />
             </View>
         );

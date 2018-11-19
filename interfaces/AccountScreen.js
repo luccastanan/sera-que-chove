@@ -29,6 +29,9 @@ export default class AccountScreen extends Component {
             dateBirth:'19/12/97',
             phone:'999991234',
         }
+        if (props.navigation.getParam('cmd', 0) == 1){
+            this.setState(UserDB.selectCache())
+        }
     }
 
     render() {
@@ -59,6 +62,7 @@ export default class AccountScreen extends Component {
                     placeholder='Sua data de nascimento'
                     onSelected={(dateBirth) => this.setState({ dateBirth })}
                     maximumDate={new Date()}
+                    mode='date'
                 />
                 <Input
                     value={this.state.phone}
@@ -88,6 +92,12 @@ export default class AccountScreen extends Component {
 
     componentDidMount() {
         Orientation.lockToPortrait();
+    }
+
+    static navigationOptions = ({ navigation }) => {
+        return ({
+            title: (navigation.getParam('cmd', 0) == 0 ? 'Nova cadastro' : 'USUÁRIO')
+        })
     }
 }
 

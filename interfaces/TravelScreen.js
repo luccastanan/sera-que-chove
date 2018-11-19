@@ -17,6 +17,7 @@ import UserDB from '../database/UserDB'
 import TravelDB from '../database/TravelDB'
 import Services from '../services';
 import Util from '../Utilities';
+import Db from '../database/RealmSchemas';
 
 export default class TravelScreen extends Component{
 
@@ -25,7 +26,7 @@ export default class TravelScreen extends Component{
             title:(navigation.getParam('cmd', 0) == 0 ? 'Nova viagem' : 'Viagem'),
             headerRight: (
                 <Button
-                    title='REGISTRAR'
+                    title={navigation.getParam('cmd', 0) == 0 ? 'REGISTRAR' : 'SALVAR'}
                     onPress={() => navigation.getParam('touchRegister')()}
                     titleStyle={baseStyles.btnNegativeText}
                     buttonStyle={baseStyles.btnNegative}
@@ -36,8 +37,9 @@ export default class TravelScreen extends Component{
 
     constructor(props){
         super(props)
+        this.isCreate = props.navigation.getParam('cmd', 0) == 0
         this.state={
-            places: [],
+            places: this.isCreate ? [] : props.navigation.getParam('travel', null).places.slice(),
             loading: false,
             loadingMessage:''
         }
@@ -47,9 +49,7 @@ export default class TravelScreen extends Component{
         return <View style={baseStyles.container}>
             <FlatList
                 data={this.state.places}
-                renderItem={ ({item, index}) => (
-                    <SimplePlace place={item} delete={() => this._delete(index)} />
-                )}
+                renderItem={ ({item, index}) => <SimplePlace place={item} delete={() => this._delete(index)} /> }
                 keyExtractor={(item, index) => index.toString()}
                 style={{ flex: 1 }}
             />
@@ -63,8 +63,7 @@ export default class TravelScreen extends Component{
                 buttonStyle={baseStyles.btnPositive}
                 containerStyle={baseStyles.containerBtn}
                 onPress={() => this._touchAddPlace()} 
-                />
-
+            />
             <ProgressDialog
                 visible={this.state.loading}
                 title="Aguarde"
@@ -85,9 +84,9 @@ export default class TravelScreen extends Component{
         this.setState({places: cPlaces})
     }
 
-    _touchAddPlace = () => this.props.navigation.navigate('PlaceAdd', { handleAdd: (place) => this._loadRestaurants(place) })
+    _touchAddPlace = () => this.props.navigation.navigate('PlaceAdd', { handleAdd: (place) => this._save(place) })
 
-    _loadRestaurants = (place) => {
+    _save = (place) => {
         place.restaurants = []
         place.weather = null
         place.notifications = []
@@ -110,38 +109,52 @@ export default class TravelScreen extends Component{
             orderItems.sort((a, b) => new Date(a.date) - new Date(b.date))
             return { places: orderItems }
         }, () => this.setState({ loading: false }))
-        /*this.setState({
-            places: [...this.state.places, place]
-        }, () => this.setState({loading:false}))*/
     }
 
     _touchRegister = async () => {
-        
         if (this.state.places.length == 0){
             Alert.alert('Atenção','É necessário adicionar pelo menos um local no roteiro da viagem')
         }else{
+            this.setState({ loadingMessage: 'Carregando previsão do tempo', loading: true })
             await Util.asyncForEach(this.state.places, async (e, i) => {
-                let differenceDays = Util.differenceOfDatesInDays(e.date, new Date())
-                await Services.forecast(e.latitude, e.longitude, differenceDays)
-                    .then(forecast => {
-                        e.weather = forecast
-                    }).catch(error => {
-                        console.log(error.toString())
-                    })
-                PlaceDB.insert(e)
+                if (!e.id) {
+                    let differenceDays = Util.differenceOfDatesInDays(e.date, new Date())
+                    await Services.forecast(e.latitude, e.longitude, differenceDays)
+                        .then(forecast => {
+                            e.weather = forecast
+                        }).catch(error => {
+                            console.log(error.toString())
+                        })
+                    PlaceDB.insert(e)
+                }
                 this.setState(prevState => {
                     const newItems = [...prevState.places]
                     newItems[i] = e
                     return { places: newItems }
                 })
             })
-
-            let travel = {
-                user: UserDB.selectCache(),
-                places: this.state.places
+            this.setState({ loading: false })
+            let travel = {}
+            if(this.isCreate){
+                travel = {
+                    user: UserDB.selectCache(),
+                    places: this.state.places,
+                    startDate: this.state.places[0].date,
+                    endDate: this.state.places[this.state.places.length-1].date
+                }
+            } else {
+                console.log('travel', this.props.navigation.getParam('travel', null))
+                let cTravel = this.props.navigation.getParam('travel', null)
+                travel.id = cTravel.id
+                travel.places = this.state.places
+                travel.startDate = this.state.places[0].date
+                travel.endDate =this.state.places[this.state.places.length - 1].date
             }
-            TravelDB.insert({...travel})
-
+            if (this.isCreate) 
+                TravelDB.insert(travel)                
+            else
+                TravelDB.update(travel)
+                
             this.props.navigation.goBack()
         }
     }

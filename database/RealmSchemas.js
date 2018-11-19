@@ -33,7 +33,9 @@ const TravelSchema = {
     properties: {
         id: 'int',
         user: USER_SCHEMA,
-        places: (PLACE_SCHEMA + '[]')
+        places: (PLACE_SCHEMA + '[]'),
+        startDate: 'date',
+        endDate:'date'
     }
 }
 
@@ -42,6 +44,7 @@ const PlaceSchema = {
     primaryKey: 'id',
     properties: {
         id: 'int',
+        name: 'string',
         address: 'string',
         date: 'date',
         restaurants: (RESTAURANT_SCHEMA + '[]'),
