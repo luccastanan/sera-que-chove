@@ -14,6 +14,7 @@ import Travel from './interfaces/TravelScreen'
 import TravelList from './interfaces/TravelListScreen'
 import PlaceAdd from './interfaces/PlaceAddScreen'
 import RestaurantList from './interfaces/RestaurantListScreen'
+import Settings from './interfaces/SettingsScreen'
 import {createStackNavigator} from 'react-navigation'
 
 import {PRIMARY_COLOR} from './Constants'
@@ -39,7 +40,6 @@ export default createStackNavigator(
 		Account: {
 			screen: Account,
 			navigationOptions: { 
-				title: 'Cadastro',
 				headerTintColor: PRIMARY_COLOR,
 				headerTitleStyle: {
 					color: PRIMARY_COLOR
@@ -92,6 +92,16 @@ export default createStackNavigator(
 				headerTintColor: PRIMARY_COLOR,
 				headerTitleStyle: {
 					color: PRIMARY_COLOR
+				}
+			}
+		},
+		Settings:{
+			screen: Settings,
+			navigationOptions:{
+				title:'Configurações',
+				headerTintColor: PRIMARY_COLOR,
+				headerTitleStyle:{
+					color:PRIMARY_COLOR
 				}
 			}
 		}

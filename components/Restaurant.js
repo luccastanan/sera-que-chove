@@ -2,12 +2,20 @@ import React, {Component} from 'react'
 import {View, Text, StyleSheet, FlatList, ImageBackground} from 'react-native'
 
 import { PRIMARY_COLOR } from '../Constants'
+import Services from '../services'
 
 export default class Restaurant extends Component{
 
+    constructor(props){
+        super(props)
+        this.state={
+            data: require('../img/restaurant.jpg')
+        }
+    }
+
     render(){
         return <View style={styles.container}>
-            <ImageBackground source={require('../img/restaurant.jpg')} 
+            <ImageBackground source={this.state.data} 
                 resizeMethod='scale'
                 style={{height:120}}
                 borderRadius={5}>
@@ -16,6 +24,22 @@ export default class Restaurant extends Component{
                 </View>
             </ImageBackground>
         </View>
+    }
+
+    async componentDidMount(){
+        if(this.props.rest.image){
+            await this._loadPhoto()
+        }
+    }
+
+    _loadPhoto = () => {
+        Services.readPhoto(this.props.rest.image)
+            .then(data => {
+                const p = {
+                    uri: `data:image/jpg;base64,${data}`
+                }
+                this.setState({ data: p }) 
+            })
     }
 }
 

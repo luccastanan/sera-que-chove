@@ -74,7 +74,7 @@ export default class TravelScreen extends Component{
         </View>
     }
 
-    componentWillMount(){
+    componentDidMount(){
         this.props.navigation.setParams({ touchRegister: () => this._touchRegister(), loading: this.state.loading })
     }
 
@@ -84,26 +84,13 @@ export default class TravelScreen extends Component{
         this.setState({places: cPlaces})
     }
 
-    _touchAddPlace = () => this.props.navigation.navigate('PlaceAdd', { handleAdd: (place) => this._save(place) })
+    _touchAddPlace = () => this.props.navigation.navigate('PlaceAdd', { handleAdd: (place) => this._savePlace(place) })
 
-    _save = (place) => {
+    _savePlace = (place) => {
         place.restaurants = []
         place.weather = null
         place.notifications = []
 
-        this.setState({loadingMessage: 'Carregando restaurantes próximos', loading: true})
-
-        Services.restaurants(place)
-            .then(place => {
-                this._savePlace(place)
-            }).catch(error => {
-                console.log(error)
-                Alert.alert('Atenção', 'Problema ao obter restaurantes próximo desse local')
-                this._savePlace(place)
-            })
-    }
-
-    _savePlace = (place) => {
         this.setState(prevState => {
             const orderItems = [...prevState.places, place]
             orderItems.sort((a, b) => new Date(a.date) - new Date(b.date))
@@ -115,7 +102,7 @@ export default class TravelScreen extends Component{
         if (this.state.places.length == 0){
             Alert.alert('Atenção','É necessário adicionar pelo menos um local no roteiro da viagem')
         }else{
-            this.setState({ loadingMessage: 'Carregando previsão do tempo', loading: true })
+            this.setState({ loadingMessage: 'Carregando previsão do tempo e restaurantes', loading: true })
             await Util.asyncForEach(this.state.places, async (e, i) => {
                 if (!e.id) {
                     let differenceDays = Util.differenceOfDatesInDays(e.date, new Date())
@@ -125,6 +112,20 @@ export default class TravelScreen extends Component{
                         }).catch(error => {
                             console.log(error.toString())
                         })
+
+                    await Services.restaurants(e)
+                        .then((place) => {})
+                        .catch(error => {
+                            console.log(error)
+                            Alert.alert('Atenção', 'Problema ao obter restaurantes próximo desse local')
+                            //this._savePlace(place)
+                        })
+
+                    await Util.asyncForEach(e.restaurants, async (rest, restI) => {
+                        if (rest.image) {
+                            await Services.downloadPhoto(rest)
+                        }
+                    })
                     PlaceDB.insert(e)
                 }
                 this.setState(prevState => {
@@ -137,13 +138,12 @@ export default class TravelScreen extends Component{
             let travel = {}
             if(this.isCreate){
                 travel = {
-                    user: UserDB.selectCache(),
+                    user: UserDB.selectCache(false),
                     places: this.state.places,
                     startDate: this.state.places[0].date,
                     endDate: this.state.places[this.state.places.length-1].date
                 }
             } else {
-                console.log('travel', this.props.navigation.getParam('travel', null))
                 let cTravel = this.props.navigation.getParam('travel', null)
                 travel.id = cTravel.id
                 travel.places = this.state.places

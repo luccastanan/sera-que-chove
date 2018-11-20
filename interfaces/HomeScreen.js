@@ -24,6 +24,7 @@ import Services from '../services'
 import TextEmptyList from '../components/TextEmptyList'
 import TravelDB from '../database/TravelDB'
 import Util from '../Utilities'
+import RNFetchBlob from 'rn-fetch-blob';
 
 const menuOptions = [{
     value: 'Nova viagem',
@@ -49,7 +50,7 @@ export default class HomeScreen extends Component {
             city: '---'
         };
 
-        console.log(UserDB.selectCache())
+        console.log(UserDB.selectCache(false))
     }
 
     render() {
@@ -139,9 +140,9 @@ export default class HomeScreen extends Component {
     componentDidMount() {
         Orientation.lockToPortrait();
         //this.props.navigation.setParams({onSelected: (text) =>this._menuSelected(text)})
-        this._requestCameraPermission()
+        this._requestRWPermission()
 
-        let travelsCollection = TravelDB.selectTravelInProgressAndFuture(UserDB.selectCache())
+        let travelsCollection = TravelDB.selectTravelInProgressAndFuture(UserDB.selectCache(false))
         travelsCollection.addListener((travels, changes) => {
             changes.insertions.forEach(index => {
                 let travelI = travels[index]
@@ -173,7 +174,26 @@ export default class HomeScreen extends Component {
         this.setState({travelList: travels})
     }
 
-    _requestCameraPermission = async () =>{
+    _requestRWPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                {
+                    'title': 'Permissão para armazenamento/leitura',
+                    'message': 'É necessário a permissão para armazenar e acessar ' +
+                        'as fotos dos restaurantes.'
+                }
+            )
+            if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+                console.log("Permissão de armazenamento negada")
+            }
+            this._requestLocationPermission()
+        } catch (err) {
+            console.warn(err)
+        }
+    }
+
+    _requestLocationPermission = async () =>{
         try {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -233,6 +253,7 @@ export default class HomeScreen extends Component {
                 this.props.navigation.navigate('Travel', { cmd: 0 })
                 break
             case 'Configurações':
+                this.props.navigation.navigate('Settings')
                 break
         }
     }

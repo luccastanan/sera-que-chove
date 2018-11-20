@@ -9,10 +9,13 @@ import Util from '../Utilities';
 
 export default class InputDate extends Component {
 
-    state = {
-        isDateTimePickerVisible: false,
-        date:''
-    };
+    constructor(props){
+        super(props)
+        this.state = {
+            isDateTimePickerVisible: false,
+            date: props.value ? Util.dateFormat(props.value, props.mode == 'date' ? 0 : 1) : ''
+        };
+    }
 
     _showDateTimePicker = () => {
         Keyboard.dismiss()
@@ -43,6 +46,7 @@ export default class InputDate extends Component {
                     minimumDate={this.props.minimumDate}
                     maximumDate={this.props.maximumDate}
                     mode={this.props.mode}
+                    date={this.props.value ? this.props.value : new Date()}
                 />
             </View>
         );

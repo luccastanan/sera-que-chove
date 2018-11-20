@@ -25,5 +25,13 @@ export default StyleSheet.create({
         borderRadius: 30,
         marginBottom: 10*/
         marginBottom:8
+    },
+    dividerVertical:{
+        borderEndWidth:1,
+        borderEndColor:PRIMARY_COLOR
+    },
+    dividerHorizontal: {
+        borderBottomWidth: 1,
+        borderBottomColor: PRIMARY_COLOR
     }
 })

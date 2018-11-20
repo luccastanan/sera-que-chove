@@ -63,7 +63,6 @@ export default class PlaceAddScreen extends Component {
     _findPlace = () => {
         RNGooglePlaces.openAutocompleteModal()
             .then((place) => {
-                console.log(place)
                 this.setState({
                     name:place.name,
                     address: place.address,

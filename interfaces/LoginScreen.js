@@ -69,7 +69,6 @@ export default class LoginScreen extends Component {
                 UserDB.insertCache(user)
                 this.props.navigation.navigate('Home')
             }else {
-                console.log(this.state)
                 Alert.alert('Atenção', 'Dados inválidos')
             }
         }

@@ -26,7 +26,7 @@ export default UserDB = {
             uUser.name = user.name
             uUser.email = user.email
             uUser.pass = user.pass
-            uUser.date_birth = user.date_birth
+            uUser.dateBirth = user.dateBirth
             uUser.phone = user.phone
         })
     },
@@ -39,11 +39,12 @@ export default UserDB = {
                 res[0].idUser = cUser.id
         })
     },
-    selectCache: () => {
+    selectCache: (withListener) => {
         let userCache = Db.objects('CacheUser')
         if(userCache.length > 0){
             let userId = userCache[0].idUser
-            return Db.objects('User').filtered('id = $0', userId)[0]
+            let users = Db.objects('User').filtered('id = $0', userId)
+            return withListener ? users : users[0]
         }
         return null
     }  

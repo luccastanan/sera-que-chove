@@ -8,16 +8,18 @@ import { PRIMARY_COLOR } from '../Constants'
 
 export default class FullRestaurant extends Component{
 
-    constructor(props){
+    constructor(props) {
         super(props)
-        console.log(props.rest)
+        this.state = {
+            data: require('../img/restaurant.jpg')
+        }
     }
 
     render(){
         return <Card style={styles.container}>
-            <ImageBackground source={require('../img/restaurant.jpg')} 
+            <ImageBackground source={this.state.data} 
                 resizeMethod='scale'
-                style={{height:130}}
+                style={{height:150}}
                 borderTopLeftRadius={5}
                 borderTopRightRadius={5}>
                 <View style={styles.titlePanel}>
@@ -36,6 +38,23 @@ export default class FullRestaurant extends Component{
             </View>
         </Card>
     }
+
+    async componentDidMount() {
+        if (this.props.rest.image) {
+            await this._loadPhoto()
+        }
+    }
+
+    _loadPhoto = () => {
+        Services.readPhoto(this.props.rest.image)
+            .then(data => {
+                const p = {
+                    uri: `data:image/jpg;base64,${data}`
+                }
+                this.setState({ data: p })
+            })
+    }
+
 }
 
 const styles = StyleSheet.create({

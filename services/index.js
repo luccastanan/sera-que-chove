@@ -1,4 +1,6 @@
-import {WEATHER_URL, WEATHER_KEY, FORECAST_URL, FIND_PLACES_URL, GOOGLE_KEY} from '../Constants'
+import RNFetchBlob from 'rn-fetch-blob'
+
+import { WEATHER_URL, WEATHER_KEY, FORECAST_URL, FIND_PLACES_URL, GOOGLE_KEY, PHOTO_URL} from '../Constants'
 import Util from '../Utilities';
 
 export default Services = {
@@ -58,12 +60,32 @@ export default Services = {
             for (k in body.results) {
                 let rest = body.results[k]
                 let r = Math.round(rest.rating * 10) / 10
+
+                let photo = rest.photos ? (rest.photos.length > 0 ? rest.photos[0].photo_reference : null) : null
+
                 place.restaurants.push({
                     title: rest.name,
                     rating: Number.isNaN(r) ? 0 : r,
                     address: rest.vicinity,
+                    image: photo
                 })
             }
             return place
+        }),
+    downloadPhoto: async (restaurant) =>
+        await RNFetchBlob.config({
+            fileCache:true,
+            appendExt: 'jpg'
         })
+        .fetch('GET', `${PHOTO_URL}&photoreference=${restaurant.image}&key=${GOOGLE_KEY}`, {})
+        .then((res) => {
+            // the temp file path
+            let path = res.path()
+            let name = path.substring(path.lastIndexOf('/') + 1)
+            restaurant.image = name
+        }),
+    readPhoto: (name) => {
+        //return RNFetchBlob.fs.readStream(RNFetchBlob.fs.dirs.DocumentDir + '/' + name, 'base64', 4095)
+        return RNFetchBlob.fs.readFile(RNFetchBlob.fs.dirs.DocumentDir + '/' + name, 'base64')
+    }
 }

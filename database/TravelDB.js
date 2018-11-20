@@ -33,6 +33,7 @@ export default TravelDB = {
         })
     },
     selectTravelInProgressAndFuture: (user) => {
-        return Db.objects('Travel').filtered('user = $0 AND endDate > $1', user, new Date())
+        //return Db.objects('Travel').filtered('user = $0 AND endDate > $1', user, new Date())
+        return Db.objects('Travel').filtered('user = $0', user)
     }
 }

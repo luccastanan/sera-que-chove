@@ -17,20 +17,23 @@ import UserDB from '../database/UserDB'
 import baseStyles from '../style/Base'
 import {PRIMARY_COLOR} from '../Constants'
 import InputDate from '../components/InputDate';
+import Util from '../Utilities';
 
 export default class AccountScreen extends Component {
 
     constructor(props){
         super(props)
         this.state={
-            name: 'Luccas',
-            email:'l@g.com',
-            pass:'123',
-            dateBirth:'19/12/97',
-            phone:'999991234',
+            name: '',
+            email:'',
+            pass:'',
+            dateBirth:'',
+            phone:'',
         }
-        if (props.navigation.getParam('cmd', 0) == 1){
-            this.setState(UserDB.selectCache())
+
+        this.isCreate = props.navigation.getParam('cmd', 0) == 0
+        if (!this.isCreate){
+            this.state = UserDB.selectCache(false)
         }
     }
 
@@ -59,6 +62,7 @@ export default class AccountScreen extends Component {
                     onChangeText={(pass) => this.setState({ pass })}
                 />
                 <InputDate
+                    value={this.state.dateBirth}
                     placeholder='Sua data de nascimento'
                     onSelected={(dateBirth) => this.setState({ dateBirth })}
                     maximumDate={new Date()}
@@ -72,7 +76,7 @@ export default class AccountScreen extends Component {
                     onChangeText={(phone) => this.setState({ phone })}
                 />
                 <Button
-                    title='Cadastrar'
+                    title={this.isCreate ? 'Cadastrar' : 'Salvar'}
                     buttonStyle={baseStyles.btnPositive}
                     containerStyle={baseStyles.containerBtn}
                     onPress={() => this._touchRegister()} 
@@ -85,7 +89,11 @@ export default class AccountScreen extends Component {
         if (this.state.name === '' || this.state.email === '' || this.state.pass === '' || this.state.dateBirth === '' || this.state.phone === '') {
             Alert.alert('Dados faltandos', 'Todos os campos são obrigatórios')
         }else{
-            UserDB.insert(this.state)
+            if (this.isCreate)
+                UserDB.insert(this.state)
+            else
+                UserDB.update(this.state)
+                
             this.props.navigation.goBack()
         }
     }
@@ -95,9 +103,9 @@ export default class AccountScreen extends Component {
     }
 
     static navigationOptions = ({ navigation }) => {
-        return ({
-            title: (navigation.getParam('cmd', 0) == 0 ? 'Nova cadastro' : 'USUÁRIO')
-        })
+        return {
+            title: (navigation.getParam('cmd', 0) == 0 ? 'Nova cadastro' : 'Perfil')
+        }
     }
 }
 

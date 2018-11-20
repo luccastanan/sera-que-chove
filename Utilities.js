@@ -1,4 +1,5 @@
-import { KELVIN } from "./Constants";
+import { KELVIN, STORAGE } from "./Constants"
+import { AsyncStorage} from 'react-native'
 
 //const createReactClass = require('create-react-class')
 
@@ -14,7 +15,7 @@ export default Utilities = {
     },
     asyncForEach: async (array, callback) => {
         for (let index = 0; index < array.length; index++) {
-            await callback(array[index], index, array);
+            await callback(array[index], index, array)
         }
     },
     dateFormat: (date, mode) => {
@@ -27,5 +28,9 @@ export default Utilities = {
         while (str.length < count) 
             str = sym + str
         return sym
-    }
+    }, getStorage: async (key, def) => {
+        let value = await AsyncStorage.getItem(STORAGE + key)
+        return value ? value : def
+    },
+    setStorage: async (key, value) => await AsyncStorage.setItem(STORAGE + key, value)
 }

@@ -9,11 +9,6 @@ import baseStyles from '../style/Base'
 
 export default class Travel extends Component {
 
-	constructor(props){
-		super(props)
-		console.log(props.travel.places.length)
-	}
-
 	render(){
 		return <Card>
 			<View style={this.props.maxWidth ? {width: (this.props.maxWidth * 0.8), flex:1} : baseStyles.container}>
