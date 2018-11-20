@@ -1,15 +1,8 @@
-    /**
-     * Sample React Native App
-     * https://github.com/facebook/react-native
-     *
-     * @format
-     * @flow
-     */
-
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Alert} from 'react-native';
+import React, {Component} from 'react'
+import {Platform, StyleSheet, Text, View, Alert} from 'react-native'
 import { Button, Input } from 'react-native-elements'
 import Orientation from 'react-native-orientation'
+import { NavigationActions, StackActions } from "react-navigation"
 
 import UserDB from '../database/UserDB'
 import {PRIMARY_COLOR} from '../Constants'
@@ -36,7 +29,6 @@ export default class LoginScreen extends Component {
                     onChangeText={(email) => this.setState({ email })}
                 />
                 <Input
-                    /*value={new Array(this.state.pass.length + 1).join('*')}*/
                     value={this.state.pass}
                     leftIcon={{ type: 'material-community-icons', name: 'lock', color: PRIMARY_COLOR }}
                     containerStyle={baseStyles.input}
@@ -67,7 +59,11 @@ export default class LoginScreen extends Component {
             let user = UserDB.auth(this.state.email, this.state.pass)
             if (user) {
                 UserDB.insertCache(user)
-                this.props.navigation.navigate('Home')
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'Home' })],
+                });
+                this.props.navigation.dispatch(resetAction);
             }else {
                 Alert.alert('Atenção', 'Dados inválidos')
             }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 
 import { PRIMARY_COLOR } from '../Constants'
 import Util from '../Utilities';
@@ -7,20 +7,19 @@ import Util from '../Utilities';
 export default class FullPlace extends Component{
 
     render(){
-        return <View style={styles.container}>
+        return <TouchableOpacity style={styles.container} onPress={() => this.props.onSelected()}>
             <View style={styles.infoPanel}>
                 <Text style={styles.txName}>{this.props.place.name}</Text>
                 <Text style={styles.txAddress}>{this.props.place.address}</Text>
                 <Text style={styles.txDate}>{Util.dateFormat(this.props.place.date, 1)}</Text>
             </View>
             <View style={styles.weatherPanel}>
-                {/*<Text style={styles.txCurrent}>{this.props.place.weather ? this.props.place.weather.current : '---'}</Text>*/}
                 <View style={styles.mmPanel}>
                     <Text style={styles.txMM}>▲ {this.props.place.weather ? this.props.place.weather.max : '---'}</Text>
                     <Text style={styles.txMM}>▼ {this.props.place.weather ? this.props.place.weather.min : '---'}</Text>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     }
 }
 

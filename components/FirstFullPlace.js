@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet, FlatList} from 'react-native'
+import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native'
 
 import { PRIMARY_COLOR } from '../Constants'
 import Restaurant from './Restaurant';
@@ -37,7 +37,9 @@ export default class FirstFullPlace extends Component{
                     style={{ flex: 1 }}
                     horizontal
                 />
-                <Text style={styles.txMore} onPress={() => this.props.onSeeMore()}>ver mais</Text>
+                <TouchableOpacity style={styles.btnMore} onPress={() => this.props.onSeeMore()}>
+                    <Text style={styles.txMore}>ver mais</Text>
+                </TouchableOpacity>
             </View>)
         } else {
             return null
@@ -89,9 +91,11 @@ const styles = StyleSheet.create({
         marginTop:8,
         marginBottom:8
     },
+    btnMore:{
+        alignSelf: 'flex-end'
+    },
     txMore:{
         fontSize:14,
-        color:PRIMARY_COLOR,
-        alignSelf:'flex-end'
+        color:PRIMARY_COLOR
     }
 })

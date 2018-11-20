@@ -17,8 +17,6 @@ export default TravelDB = {
         return Object.keys(res).length !== 0 ? res[0] : null
     },
     selectAll: (user) => {
-        /*let res = Db.objects('Travel').filtered('user = $0', user)
-        return Object.keys(res).length !== 0 ? res : null*/
         return Db.objects('Travel').filtered('user = $0', user)
     },
     delete: (travel) => {

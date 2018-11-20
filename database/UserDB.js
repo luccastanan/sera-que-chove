@@ -49,27 +49,3 @@ export default UserDB = {
         return null
     }  
 }
-
-/*export const updateUser = (user) => new Promise((resolve, reject) => {
-    Realm.open(dbOptions)
-        .then(realm => {
-            realm.write(() => {
-                let uUser = realm.objectForPrimaryKey(USER_SCHEMA, user.id)
-                uUser.name = user.name
-                uUser.email = user.email
-                uUser.pass = user.pass
-                uUser.date_birth = user.date_birth
-                uUser.phone = user.phone
-                resolve()
-            })
-        }).catch(error => reject(error))
-})*/
-
-/*export const validateUser = (email, pass) => new Promise((resolve, reject) => {
-        Realm.open(dbOptions)
-            .then(realm => {
-                let res = realm.objects(USER_SCHEMA).filtered(`email = ${email} AND pass = ${pass}`)
-                resolve(res ? true : false)
-            }).catch(error => reject(error))
-    })
-}*/

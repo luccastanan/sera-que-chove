@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, FlatList, ImageBackground, Dimensions, PermissionsAndroid } from 'react-native';
 
@@ -42,12 +34,14 @@ export default class HomeScreen extends Component {
         this.state = {
             openedMenu: false,
             travelList: [],
-            currentWeather: -100,
-            currentMax: -1,
-            currentMin: -1,
-            tomorrowMax: 22,
-            tomorrowMin: 14,
-            city: '---'
+            currentWeather: 0,
+            currentMax: 0,
+            currentMin: 0,
+            tomorrowMax: 0,
+            tomorrowMin: 0,
+            city: '',
+            loaded: false,
+            loading:false,
         };
 
         console.log(UserDB.selectCache(false))
@@ -60,10 +54,9 @@ export default class HomeScreen extends Component {
                     <ImageBackground
                         source={require('../img/forest.jpg')}
                         style={{ height: imageHeight, width: imageWidth }}>
-                        {/*<View style={{ backgroundColor: '#00000059', flex: 1 }} />*/}
                         <View style={styles.panelContent}>
                             <View style={[styles.panelHeader,{position:'absolute'}]}>
-                                <Text style={[styles.weatherText, styles.h4, {marginTop:8}]}>{this.state.city}</Text>
+                                <Text style={[styles.weatherText, styles.h4, {marginTop:8}]}>{this.state.loaded ? this.state.city : ''}</Text>
                                 <Dropdown data={menuOptions}
                                     rippleInsets={{ top: 4, bottom: 0, left: 0, right: 8 }}
                                     containerStyle={{ width: 50, height: 50 }}
@@ -81,25 +74,36 @@ export default class HomeScreen extends Component {
                                     onChangeText={(text) => this._menuSelected(text)}
                                 />
                             </View>
-                            <View style={styles.panelWeather}>
-                                <Text style={[styles.weatherText, styles.panelCurrent]}>{this.state.currentWeather == -100 ? "---" : this.state.currentWeather}º</Text>
-                                {this.state.currentWeather !== -100 &&
+                            {this.state.loaded ?
+                                (<View style={styles.panelWeather}>
+                                    <Text style={[styles.weatherText, styles.panelCurrent]}>{ this.state.currentWeather}º</Text>
                                     <View style={styles.panelMM}>
                                         <Text style={styles.weatherText}>▲ {this.state.currentMax}º</Text>
                                         <Text style={styles.weatherText}>▼ {this.state.currentMin}º</Text>
                                     </View>
-                                }
-                            </View>
+                                </View>):
+                                (<View style={styles.panelWeather}>
+                                    <Text style={styles.weatherText}>Não foi possível carregar a {'\n'}previsão do tempo da cidade atual</Text>
+                                    <Button
+                                        title='Tentar novamente'
+                                        buttonStyle={baseStyles.btnPositive}
+                                        containerStyle={baseStyles.containerBtn}
+                                        onPress={() => this._refreshCurrentLocation()}
+                                        loading={this.state.loading} />
+                                </View>)
+                            }
                         </View>
-                        <View style={styles.panelBottom}>
-                            <View style={styles.panelBottomDesc}>
-                                <Text style={[styles.weatherText, styles.h5]}>Amanhã</Text>
+                        {this.state.loaded &&
+                            <View style={styles.panelBottom}>
+                                <View style={styles.panelBottomDesc}>
+                                    <Text style={[styles.weatherText, styles.h5]}>Amanhã</Text>
+                                </View>
+                                <View style={styles.panelBottomMM}>
+                                    <Text style={styles.weatherText}>▲ {this.state.tomorrowMax}º</Text>
+                                    <Text style={styles.weatherText}>▼ {this.state.tomorrowMin}º</Text>
+                                </View>
                             </View>
-                            <View style={styles.panelBottomMM}>
-                                <Text style={styles.weatherText}>▲ {this.state.tomorrowMax}º</Text>
-                                <Text style={styles.weatherText}>▼ {this.state.tomorrowMin}º</Text>
-                            </View>
-                        </View>                
+                        }                
                     </ImageBackground >
                 </View>
                 <View style={baseStyles.container}>
@@ -110,14 +114,6 @@ export default class HomeScreen extends Component {
                         keyExtractor={(item, index) => index.toString()}
                         style={{ flex:1,marginTop:8}}
                     />
-
-                    {/*<Carousel
-                        data={this.state.travelList}
-                        renderItem={({ item,index }) => <Travel maxWidth={imageWidth} travel={item} onSeeMore={(place) => this._touchSeeMoreRestaurants(Util.mapToList(place.restaurants))} />}
-                        sliderWidth={imageWidth}
-                        itemWidth={imageWidth * 0.8}
-                        style={{ flex: 1 }}
-                    />*/}
 
                     {   this.state.travelList.length > 0 &&
                         <Button
@@ -214,6 +210,7 @@ export default class HomeScreen extends Component {
     }
 
     _refreshCurrentLocation = () => {
+        this.setState({loading:true})
         navigator.geolocation.getCurrentPosition(data => {
             Services.forecast(data.coords.latitude, data.coords.longitude, 0)
                 .then(weather => {
@@ -225,6 +222,7 @@ export default class HomeScreen extends Component {
                     })
                 }).catch(error => {
                     console.log(error.toString())
+                    this.setState({ loading: false })
                 })
 
             Services.forecast(data.coords.latitude, data.coords.longitude, 1)
@@ -232,14 +230,18 @@ export default class HomeScreen extends Component {
                     this.setState({
                         tomorrowWeather: weather.current,
                         tomorrowMax: weather.max,
-                        tomorrowMin: weather.min
+                        tomorrowMin: weather.min,
+                        loaded:true,
+                        loading:false
                     })
                 }).catch(error => {
                     console.log(error.toString())
+                    this.setState({ loading: false })
                 })
         },
         error => {
             console.log(error)
+            this.setState({ loading: false })
         })
     }
 
@@ -298,16 +300,16 @@ const styles = StyleSheet.create({
         paddingStart:10,
         paddingTop:4,
         paddingEnd:10,
-        paddingBottom:4
+        paddingBottom:4,
+        justifyContent: 'space-between'
     },
-    panelBottomDesc: {
-        flex: 1
-    },
+    panelBottomDesc: {},
     panelBottomMM: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     weatherText:{
-        color:'white'
+        color:'white',
+        textAlign:'center'
     },
     h4:{
         fontSize:20

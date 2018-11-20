@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Text, View, StyleSheet, TouchableOpacity, Switch} from 'react-native'
-import {} from 'react-native-elements'
+import { } from 'react-native-elements'
+import { NavigationActions, StackActions } from "react-navigation"
 
 import baseStyles from '../style/Base'
 import { PRIMARY_COLOR } from '../Constants';
@@ -43,7 +44,7 @@ export default class SettingsScreen extends Component {
                 <Text style={styles.descOption}>{this.state.email}</Text>
             </TouchableOpacity>
             <View style={baseStyles.dividerHorizontal} />
-            <TouchableOpacity style={styles.optionContainer}>
+            <TouchableOpacity style={styles.optionContainer} onPress={() => {this._logout()}}>
                 <Text style={styles.titleOption}>Sair</Text>
             </TouchableOpacity>
         </View>
@@ -52,6 +53,15 @@ export default class SettingsScreen extends Component {
     _changeVibrate = (value) => {
         this.setState({ isVibrate: value })
         Util.setStorage('vibrate', (value ? 1 : 0).toString())
+    }
+
+    _logout = () => {
+        UserDB.insertCache({id:0})
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Login' })],
+        });
+        this.props.navigation.dispatch(resetAction);
     }
 
     async componentDidMount(){
@@ -70,7 +80,8 @@ export default class SettingsScreen extends Component {
 
 const styles = StyleSheet.create({
     container:{
-        
+        backgroundColor:'white',
+        flex:1
     },
     titleCategory:{
         fontSize:14,

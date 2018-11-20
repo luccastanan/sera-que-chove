@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, FlatList, TouchableOpacity, Alert } from 'react-native';
 
@@ -23,15 +15,7 @@ import {PRIMARY_COLOR} from '../Constants'
 import Util from '../Utilities';
 
 export default class HomeScreen extends Component {
-
-    /*static navigationOptions = ({ navigation }) => {
-        return {
-            headerRight: (
-                <IconMaterial.Button name="plus" size={30} backgroundColor='transparent' color={PRIMARY_COLOR} onPress={() => navigation.navigate('Travel', {cmd:0})} />
-            )
-        }
-    }*/
-
+    
     constructor(props) {
         super(props)
 

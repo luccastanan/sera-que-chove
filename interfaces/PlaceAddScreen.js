@@ -1,12 +1,9 @@
 
 import React, {Component} from 'react'
-import {FlatList, View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native'
+import {View, StyleSheet, Alert} from 'react-native'
 
 import {Button, Input} from 'react-native-elements'
 import RNGooglePlaces from 'react-native-google-places'
-import DatePicker from 'react-native-datepicker'
-import IconMaterial from 'react-native-vector-icons/MaterialIcons'
-import IconMaterialCM from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import baseStyles from '../style/Base'
 import { PRIMARY_COLOR } from '../Constants'
@@ -14,14 +11,6 @@ import Util from '../Utilities';
 import InputDate from '../components/InputDate';
 
 export default class PlaceAddScreen extends Component {
-
-    /*static navigationOptions = ({ navigation }) => {
-        return {
-            headerRight: (
-                <IconMaterialCM.Button name="check" size={30} backgroundColor='transparent' color={PRIMARY_COLOR} onPress={() => navigation.getParam('touchAdd')()} />
-            )
-        }
-    }*/
 
     constructor(props){
         super(props)
@@ -74,8 +63,12 @@ export default class PlaceAddScreen extends Component {
     }
 
     _touchAdd = () => {
-        this.props.navigation.goBack()
-        this.props.navigation.getParam('handleAdd')(this.state)
+        if (this.state.address == '' || this.state.date == null) {
+            Alert.alert('Dados faltandos', 'Todos os campos são obrigatórios')            
+        }else{
+            this.props.navigation.goBack()
+            this.props.navigation.getParam('handleAdd')(this.state)
+        }
     }
 
     componentWillMount() {
